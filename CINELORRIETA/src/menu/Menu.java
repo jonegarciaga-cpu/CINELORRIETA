@@ -2,12 +2,14 @@ package menu;
 
 import java.util.ArrayList;
 
+import gestores.BDclientes;
 import gestores.DBpeliculas;
+import pojos.Cliente;
 import pojos.Pelicula;
 
 public class Menu {
 
-	private void verPeliculas() {
+	private void verTodasPeliculas() {
 		DBpeliculas dBAcces = new DBpeliculas();
 		ArrayList<Pelicula> peliculas = dBAcces.getAllPeliculas();
 
@@ -19,6 +21,20 @@ public class Menu {
 				System.out.println(peliculas.get(i));
 			}
 		}
+	}
+
+	private void loging() {
+		BDclientes dBAcces = new BDclientes();
+
+		// Nuevo cliente a insertar...
+		Cliente cliente = new Cliente();
+		cliente.setDni("3333333A");
+		cliente.setNombre("Andres");
+		cliente.setApellidos("Dominguez");
+		cliente.setEmail("jone@gamil");
+		cliente.setPassword("sadad");
+
+		dBAcces.insertEjemplo(cliente);
 	}
 
 }// FIN
