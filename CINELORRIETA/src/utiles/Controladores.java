@@ -66,9 +66,9 @@ public class Controladores {
 		return ret;
 	}
 
-	public String leerDeTeclado() {
+	public String leerDeTeclado(String text) {
 		String ret = null;
-		System.out.print("Dame un texto: ");
+		System.out.print(text);
 		ret = sc.nextLine();
 		return ret;
 	}
