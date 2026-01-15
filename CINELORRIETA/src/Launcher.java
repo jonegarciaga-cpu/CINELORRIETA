@@ -1,7 +1,7 @@
-import menu.Login;
+import menu.Menu;
 
 public class Launcher {
 	public static void main(String[] args) {
-		new Login().mostrar();
+		new Menu().inicio();
 	}
 }

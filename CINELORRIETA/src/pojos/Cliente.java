@@ -75,4 +75,8 @@ public class Cliente {
 				+ ", password=" + password + "]";
 	}
 
+	public String toStringSimple() {
+		return "Cliente [dni=" + dni + ", password=" + password + "]";
+	}
+
 }
