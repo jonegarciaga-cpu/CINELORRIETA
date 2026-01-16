@@ -54,23 +54,27 @@ public class Menu {
 
 	private void eleguirPelicula() {
 		ArrayList<Pelicula> peliculas = peliculas();
-		int cuantasPeliculas = peliculas.size();
 		int ret = 0;
 		do {
 			verTodasPeliculas();
 			ret = con.pideNumero("Pulse 0 para terminar o eliga una Pelicula");
-			if (ret > cuantasPeliculas) {
+			if (ret > peliculas.size()) {
 				System.out.println("No existe esa pelicula por favor compruevelo denuevo");
 			} else {
-				for (int i = 0; i < cuantasPeliculas; i++) {
-					if (ret == peliculas.get(i).idPelicula) {
-						ret = 0;
-						elegirSesionPelicula(i);
-					}
-				}
+				ret = encontrarPelicula(peliculas, ret);
 			}
 		} while (ret != 0);
 
+	}
+
+	private int encontrarPelicula(ArrayList<Pelicula> peliculas, int ret) {
+		for (int i = 0; i < peliculas.size(); i++) {
+			if (ret == peliculas.get(i).idPelicula) {
+				ret = 0;
+				elegirSesionPelicula(i);
+			}
+		}
+		return ret;
 	}
 
 	private void verSesionesPelicula(int pelicula) {
@@ -93,14 +97,23 @@ public class Menu {
 			System.out.println(peliculas.get(pelicula));
 			verSesionesPelicula(pelicula);
 			sesion = con.pideNumero("Pulse 0 para terminar o eliga una Sesion");
-			for (int i = 0; i < sesiones.size(); i++) {
-				if (sesion == sesiones.get(i).idSesion) {
-					ret = sesiones.get(i);
-					sesion = 0;
-				}
+			ret = encontrarSesion(sesiones, sesion, ret);
+			if (ret == null) {
+				System.out.println("Sesion no encontrada");
+			} else {
+				sesion = 0;
 			}
 		} while (sesion != 0);
 		return ret;
 	}
 
-}// FIN
+	private Sesion encontrarSesion(ArrayList<Sesion> sesiones, int sesion, Sesion ret) {
+		for (int i = 0; i < sesiones.size(); i++) {
+			if (sesion == sesiones.get(i).idSesion) {
+				ret = sesiones.get(i);
+			}
+		}
+		return ret;
+	}
+
+}// FIN =P
