@@ -2,7 +2,7 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.DBclientes;
+import gestores.GestorClientes;
 import pojos.Cliente;
 import utiles.Controladores;
 
@@ -98,7 +98,7 @@ public class Login {
 	public boolean buscarSIclienteExiste() {
 		String cliente = iniciar();
 		boolean ret = false;
-		DBclientes dBAcces = new DBclientes();
+		GestorClientes dBAcces = new GestorClientes();
 		ArrayList<Cliente> clientes = dBAcces.getAllClientes();
 
 		if (null == clientes) {
@@ -115,7 +115,7 @@ public class Login {
 	}
 
 	private void registrase() {
-		DBclientes dBAcces = new DBclientes();
+		GestorClientes dBAcces = new GestorClientes();
 		Cliente cliente = new Cliente();
 		String dni = pedirDNI();
 		cliente.setDni(dni);

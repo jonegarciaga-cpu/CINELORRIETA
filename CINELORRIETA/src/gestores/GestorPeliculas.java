@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import pojos.Pelicula;
 import utiles.DBUtils;
 
-public class DBpeliculas {
+public class GestorPeliculas {
 
 	/**
 	 * Retorna todas las filas de la tabla Peliculas. Si la consulta no devuelve

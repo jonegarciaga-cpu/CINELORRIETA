@@ -2,8 +2,10 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.DBpeliculas;
+import gestores.GestorEntradas;
+import gestores.GestorPeliculas;
 import gestores.GestorSesiones;
+import pojos.Entrada;
 import pojos.Pelicula;
 import pojos.Sesion;
 import utiles.Controladores;
@@ -22,27 +24,26 @@ public class Menu {
 		do {
 			tex.bienbenida();
 			new Login().mostrar();
-			/**
-			 * Dentro de elegir pelicula llegas a elegir tambien la sesion de la palicul.
-			 */
+			// Dentro de elegir pelicula llegas a elegir tambien la sesion de la palicula.
 			eleguirPelicula();
+
 		} while (true);
 	}
 
-	private ArrayList<Pelicula> peliculas() {
-		DBpeliculas dBAcces = new DBpeliculas();
+	private ArrayList<Pelicula> cargarPeliculas() {
+		GestorPeliculas dBAcces = new GestorPeliculas();
 		ArrayList<Pelicula> peliculas = dBAcces.getAllPeliculas();
 		return peliculas;
 	}
 
-	private ArrayList<Sesion> sesiones(int pelicula) {
+	private ArrayList<Sesion> cargarSesiones(int pelicula) {
 		GestorSesiones gSesiones = new GestorSesiones();
 		ArrayList<Sesion> sesiones = gSesiones.getAllSesiones(pelicula);
 		return sesiones;
 	}
 
 	public void verTodasPeliculas() {
-		ArrayList<Pelicula> peliculas = peliculas();
+		ArrayList<Pelicula> peliculas = cargarPeliculas();
 		if (null == peliculas) {
 			System.out.println("No hay Peliculas");
 		} else {
@@ -53,7 +54,7 @@ public class Menu {
 	}
 
 	private void eleguirPelicula() {
-		ArrayList<Pelicula> peliculas = peliculas();
+		ArrayList<Pelicula> peliculas = cargarPeliculas();
 		int ret = 0;
 		do {
 			verTodasPeliculas();
@@ -78,7 +79,7 @@ public class Menu {
 	}
 
 	private void verSesionesPelicula(int pelicula) {
-		ArrayList<Sesion> sesion = sesiones(pelicula);
+		ArrayList<Sesion> sesion = cargarSesiones(pelicula);
 		if (null == sesion) {
 			System.out.println("No hay Peliculas");
 		} else {
@@ -89,8 +90,8 @@ public class Menu {
 	}
 
 	private Sesion elegirSesionPelicula(int pelicula) {
-		ArrayList<Sesion> sesiones = sesiones(pelicula);
-		ArrayList<Pelicula> peliculas = peliculas();
+		ArrayList<Sesion> sesiones = cargarSesiones(pelicula);
+		ArrayList<Pelicula> peliculas = cargarPeliculas();
 		int sesion = 0;
 		Sesion ret = null;
 		do {
@@ -115,5 +116,21 @@ public class Menu {
 		}
 		return ret;
 	}
+
+	public void entrada(Sesion sesion) {
+		GestorEntradas dBAcces = new GestorEntradas();
+		Entrada entrada = new Entrada();
+		int personas = con.pideNumero("Para cuantas personas quieres la entrada");
+		entrada.setNumPersonas(personas);
+		double precioTotal = personas * sesion.getPrecio();
+		entrada.setPrecio(precioTotal);
+		entrada.setSesion(sesion);
+		dBAcces.insertarEntrada(entrada);
+
+	}
+
+//	private void printEntrada(Sesion sesion, Entrada entrada) {
+//
+//	}
 
 }// FIN =P
