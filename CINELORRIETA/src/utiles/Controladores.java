@@ -73,4 +73,8 @@ public class Controladores {
 		return ret;
 	}
 
+//	for (int num : numbers) {
+//	      System.out.println(num);
+//	    }
+	
 }

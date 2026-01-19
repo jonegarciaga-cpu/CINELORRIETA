@@ -1,35 +1,31 @@
 package pojos;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
+/**
+ * Describe la tabla Sesion
+ */
 public class Sesion {
 
-	private Sala sala = new Sala();
-	private Pelicula peli = new Pelicula();
+	// -- Atributos de la tabla --
 
 	public int idSesion = 0;
-	private Date FechaIni = null;
-	private Date FechaFin = null;
+	private Timestamp fechaIni = null;
+	private Date fechaFin = null;
 	private double precio = 0;
 	private int espectadores = 0;
-	private int idSala = sala.idSala;
-	private int idPelicula = peli.idPelicula;
 
-	public Sala getSala() {
-		return sala;
-	}
+	// -- Relaciones --
 
-	public void setSala(Sala sala) {
-		this.sala = sala;
-	}
+	// Relación 1 a 1
+	private Sala sala = null;
 
-	public Pelicula getPeli() {
-		return peli;
-	}
+	// Relación 1 a 1
+	private Pelicula peli = null;
 
-	public void setPeli(Pelicula peli) {
-		this.peli = peli;
+	public Sesion() {
 	}
 
 	public int getIdSesion() {
@@ -40,20 +36,20 @@ public class Sesion {
 		this.idSesion = idSesion;
 	}
 
-	public Date getFechaIni() {
-		return FechaIni;
+	public Timestamp getFechaIni() {
+		return fechaIni;
 	}
 
-	public void setFechaIni(Date fechaIni) {
-		FechaIni = fechaIni;
+	public void setFechaIni(Timestamp timestamp) {
+		this.fechaIni = timestamp;
 	}
 
 	public Date getFechaFin() {
-		return FechaFin;
+		return fechaFin;
 	}
 
 	public void setFechaFin(Date fechaFin) {
-		FechaFin = fechaFin;
+		this.fechaFin = fechaFin;
 	}
 
 	public double getPrecio() {
@@ -72,25 +68,25 @@ public class Sesion {
 		this.espectadores = espectadores;
 	}
 
-	public int getIdSala() {
-		return idSala;
+	public Sala getSala() {
+		return sala;
 	}
 
-	public void setIdSala(int idSala) {
-		this.idSala = idSala;
+	public void setSala(Sala sala) {
+		this.sala = sala;
 	}
 
-	public int getIdPelicula() {
-		return idPelicula;
+	public Pelicula getPeli() {
+		return peli;
 	}
 
-	public void setIdPelicula(int idPelicula) {
-		this.idPelicula = idPelicula;
+	public void setPeli(Pelicula peli) {
+		this.peli = peli;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(FechaFin, FechaIni, espectadores, idPelicula, idSala, idSesion, peli, precio, sala);
+		return Objects.hash(espectadores, fechaFin, fechaIni, idSesion, peli, precio, sala);
 	}
 
 	@Override
@@ -102,18 +98,21 @@ public class Sesion {
 		if (getClass() != obj.getClass())
 			return false;
 		Sesion other = (Sesion) obj;
-		return Objects.equals(FechaFin, other.FechaFin) && Objects.equals(FechaIni, other.FechaIni)
-				&& espectadores == other.espectadores && idPelicula == other.idPelicula && idSala == other.idSala
-				&& idSesion == other.idSesion && Objects.equals(peli, other.peli)
+		return espectadores == other.espectadores && Objects.equals(fechaFin, other.fechaFin)
+				&& Objects.equals(fechaIni, other.fechaIni) && idSesion == other.idSesion
+				&& Objects.equals(peli, other.peli)
 				&& Double.doubleToLongBits(precio) == Double.doubleToLongBits(other.precio)
 				&& Objects.equals(sala, other.sala);
 	}
 
 	@Override
 	public String toString() {
-		return "Sesion [sala=" + sala + ", peli=" + peli + ", idSesion=" + idSesion + ", FechaIni=" + FechaIni
-				+ ", FechaFin=" + FechaFin + ", precio=" + precio + ", espectadores=" + espectadores + ", idSala="
-				+ idSala + ", idPelicula=" + idPelicula + "]";
+		return "Sesion [idSesion=" + idSesion + ", fechaIni=" + fechaIni + ", fechaFin=" + fechaFin + ", precio="
+				+ precio + ", espectadores=" + espectadores + ", sala=" + sala + ", peli=" + peli + "]";
+	}
+
+	public String toStringSimple() {
+		return "Sesion [idSesion=" + idSesion + ", fechaIni=" + fechaIni + ", precio=" + precio + "]";
 	}
 
 }

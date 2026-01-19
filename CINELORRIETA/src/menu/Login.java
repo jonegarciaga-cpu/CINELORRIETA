@@ -2,7 +2,7 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.BDclientes;
+import gestores.GestorClientes;
 import pojos.Cliente;
 import utiles.Controladores;
 
@@ -10,9 +10,8 @@ public class Login {
 
 	Controladores con = new Controladores();
 
-	public boolean mostrar() {
+	public void mostrar() {
 		int opcion = 0;
-		boolean ret = false;
 		do {
 			new menu.TextosMenu().loginInicio();
 			opcion = con.pideNumero("Que opcion deseas");
@@ -21,7 +20,6 @@ public class Login {
 				break;
 			case 2:
 				buscarSIclienteExiste();
-				ret = true;
 				break;
 			case 3:
 				registrase();
@@ -30,7 +28,6 @@ public class Login {
 				System.out.println("Opcion no valido");
 			}
 		} while (opcion != 1);
-		return ret;
 	}
 
 	/**
@@ -45,7 +42,7 @@ public class Login {
 		String ret;
 		do {
 			ret = con.leerDeTeclado("Introduce un correo Gmail: ").toLowerCase();
-		} while (!ret.matches("\\w+@\\w+\\.\\w+"));
+		} while (!ret.matches("[a-z0-9._%+-]+@gmail\\.com"));
 
 		return ret;
 	}
@@ -101,7 +98,7 @@ public class Login {
 	public boolean buscarSIclienteExiste() {
 		String cliente = iniciar();
 		boolean ret = false;
-		BDclientes dBAcces = new BDclientes();
+		GestorClientes dBAcces = new GestorClientes();
 		ArrayList<Cliente> clientes = dBAcces.getAllClientes();
 
 		if (null == clientes) {
@@ -118,7 +115,7 @@ public class Login {
 	}
 
 	private void registrase() {
-		BDclientes dBAcces = new BDclientes();
+		GestorClientes dBAcces = new GestorClientes();
 		Cliente cliente = new Cliente();
 		String dni = pedirDNI();
 		cliente.setDni(dni);

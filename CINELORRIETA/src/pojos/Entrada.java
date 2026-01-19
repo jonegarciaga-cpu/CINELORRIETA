@@ -4,31 +4,12 @@ import java.util.Objects;
 
 public class Entrada {
 
-	private Sesion sesion = new Sesion();
-	private Compra compra = new Compra();
-
 	private int idEntrada = 0;
 	private int numPersonas = 0;
 	private double precio = 0;
 	private double descuento = 0;
-	private int idSesion = sesion.idSesion;
-	private int idCompra = compra.idCompra;
-
-	public Sesion getSesion() {
-		return sesion;
-	}
-
-	public void setSesion(Sesion sesion) {
-		this.sesion = sesion;
-	}
-
-	public Compra getCompra() {
-		return compra;
-	}
-
-	public void setCompra(Compra compra) {
-		this.compra = compra;
-	}
+	private Sesion sesion = null;
+	private Compra compra = null;
 
 	public int getIdEntrada() {
 		return idEntrada;
@@ -62,25 +43,25 @@ public class Entrada {
 		this.descuento = descuento;
 	}
 
-	public int getIdSesion() {
-		return idSesion;
+	public Sesion getSesion() {
+		return sesion;
 	}
 
-	public void setIdSesion(int idSesion) {
-		this.idSesion = idSesion;
+	public void setSesion(Sesion sesion) {
+		this.sesion = sesion;
 	}
 
-	public int getIdCompra() {
-		return idCompra;
+	public Compra getCompra() {
+		return compra;
 	}
 
-	public void setIdCompra(int idCompra) {
-		this.idCompra = idCompra;
+	public void setCompra(Compra compra) {
+		this.compra = compra;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(compra, descuento, idCompra, idEntrada, idSesion, numPersonas, precio, sesion);
+		return Objects.hash(compra, descuento, idEntrada, numPersonas, precio, sesion);
 	}
 
 	@Override
@@ -94,17 +75,15 @@ public class Entrada {
 		Entrada other = (Entrada) obj;
 		return Objects.equals(compra, other.compra)
 				&& Double.doubleToLongBits(descuento) == Double.doubleToLongBits(other.descuento)
-				&& idCompra == other.idCompra && idEntrada == other.idEntrada && idSesion == other.idSesion
-				&& numPersonas == other.numPersonas
+				&& idEntrada == other.idEntrada && numPersonas == other.numPersonas
 				&& Double.doubleToLongBits(precio) == Double.doubleToLongBits(other.precio)
 				&& Objects.equals(sesion, other.sesion);
 	}
 
 	@Override
 	public String toString() {
-		return "Entrada [sesion=" + sesion + ", compra=" + compra + ", idEntrada=" + idEntrada + ", numPersonas="
-				+ numPersonas + ", precio=" + precio + ", descuento=" + descuento + ", idSesion=" + idSesion
-				+ ", idCompra=" + idCompra + "]";
+		return "Entrada [idEntrada=" + idEntrada + ", numPersonas=" + numPersonas + ", precio=" + precio
+				+ ", descuento=" + descuento + ", sesion=" + sesion + ", compra=" + compra + "]";
 	}
 
 }

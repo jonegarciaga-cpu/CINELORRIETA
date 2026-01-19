@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import pojos.Cliente;
 import utiles.DBUtils;
 
-public class BDclientes {
+public class GestorClientes {
 	/**
 	 * Inserta un alumno en la tabla t_alumno
 	 * 

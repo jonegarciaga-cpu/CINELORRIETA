@@ -74,4 +74,8 @@ public class Pelicula {
 				+ genero + ", precio=" + precio + "]";
 	}
 
+	public String toStringSimple() {
+		return "  Pelicula [idPelicula=" + idPelicula + ", nombre=" + nombre + ", precio=" + precio + "]";
+	}
+
 }

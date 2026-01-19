@@ -4,21 +4,12 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class Compra {
-	private Cliente cli = new Cliente();
 
 	public int idCompra = 0;
 	private Date fechaHora = null;
 	private double precioTotal = 0;
 	private double descuento = 0;
-	private String dni = cli.dni;
-
-	public Cliente getCli() {
-		return cli;
-	}
-
-	public void setCli(Cliente cli) {
-		this.cli = cli;
-	}
+	private Cliente cli = null;
 
 	public int getIdCompra() {
 		return idCompra;
@@ -52,17 +43,17 @@ public class Compra {
 		this.descuento = descuento;
 	}
 
-	public String getDni() {
-		return dni;
+	public Cliente getCli() {
+		return cli;
 	}
 
-	public void setDni(String dni) {
-		this.dni = dni;
+	public void setCli(Cliente cli) {
+		this.cli = cli;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cli, descuento, dni, fechaHora, idCompra, precioTotal);
+		return Objects.hash(cli, descuento, fechaHora, idCompra, precioTotal);
 	}
 
 	@Override
@@ -76,15 +67,14 @@ public class Compra {
 		Compra other = (Compra) obj;
 		return Objects.equals(cli, other.cli)
 				&& Double.doubleToLongBits(descuento) == Double.doubleToLongBits(other.descuento)
-				&& Objects.equals(dni, other.dni) && Objects.equals(fechaHora, other.fechaHora)
-				&& idCompra == other.idCompra
+				&& Objects.equals(fechaHora, other.fechaHora) && idCompra == other.idCompra
 				&& Double.doubleToLongBits(precioTotal) == Double.doubleToLongBits(other.precioTotal);
 	}
 
 	@Override
 	public String toString() {
-		return "Compra [cli=" + cli + ", idCompra=" + idCompra + ", fechaHora=" + fechaHora + ", precioTotal="
-				+ precioTotal + ", descuento=" + descuento + ", dni=" + dni + "]";
+		return "Compra [idCompra=" + idCompra + ", fechaHora=" + fechaHora + ", precioTotal=" + precioTotal
+				+ ", descuento=" + descuento + ", cli=" + cli + "]";
 	}
 
 }
