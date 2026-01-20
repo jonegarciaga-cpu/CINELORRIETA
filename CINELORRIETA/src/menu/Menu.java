@@ -12,7 +12,7 @@ import pojos.Sesion;
 import utiles.Controladores;
 
 public class Menu {
-
+//pus
 	private Controladores con;
 	private Peliculas pelis;
 	private Sesiones ses;
