@@ -2,6 +2,7 @@ package gestores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,53 +13,33 @@ import utiles.DBUtils;
 
 public class GestorClientes {
 	/**
-	 * Inserta un alumno en la tabla t_alumno
+	 * Inserta un cliente en la tabla clientes
 	 * 
 	 * @param cliente El cliente a insertar
 	 */
-	public void insertEjemplo(Cliente cliente) {
+	public void insertCliente(Cliente cliente) {
 
-		// La conexion con BBDD
-		Connection connection = null;
+		String sql = "INSERT INTO cliente (dni, nombre, apellidos, email, password) VALUES (?, ?, ?, ?, ?)";
 
-		// Vamos a lanzar una sentencia SQL contra la BBDD
-		Statement statement = null;
+		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
+				PreparedStatement ps = connection.prepareStatement(sql)) {
 
-		try {
-			// El Driver que vamos a usar
 			Class.forName(DBUtils.DRIVER);
 
-			// Abrimos la conexion con BBDD
-			connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
+			ps.setString(1, cliente.getDni());
+			ps.setString(2, cliente.getNombre());
+			ps.setString(3, cliente.getApellidos());
+			ps.setString(4, cliente.getEmail());
+			ps.setString(5, cliente.getPassword()); // El trigger se encargará de cifrar la contraseña
 
-			// Vamos a lanzar la sentencia...
-			statement = connection.createStatement();
+			ps.executeUpdate();
 
-			// Montamos la SQL. Esta es una forma simple de hacerlo, hay otra mejor...
-			String sql = "insert into cliente (dni ,nombre, apellidos, email, password) VALUES ('" + cliente.getDni()
-					+ "', '" + cliente.getNombre() + "', '" + cliente.getApellidos() + "', '" + cliente.getEmail()
-					+ "', '" + cliente.getPassword() + "')";
-
-			statement.executeUpdate(sql);
+			System.out.println("Cliente insertado correctamente.");
 
 		} catch (SQLException sqle) {
 			System.out.println("Error con la BBDD - " + sqle.getMessage());
 		} catch (Exception e) {
 			System.out.println("Error generico - " + e.getMessage());
-		} finally {
-			// Cerramos al reves de como las abrimos
-			try {
-				if (statement != null)
-					statement.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
 		}
 	}
 
@@ -67,82 +48,34 @@ public class GestorClientes {
 	 * nada, retorna NULL
 	 */
 	public ArrayList<Cliente> getAllClientes() {
-		ArrayList<Cliente> ret = null;
+		ArrayList<Cliente> ret = new ArrayList<>();
 
-		// SQL que queremos lanzar
-		String sql = "select * from Cliente";
+		String sql = "SELECT dni, nombre, apellidos, email, AES_DECRYPT(password, 'mi_clave_secreta') AS password_plain FROM Cliente";
 
-		// La conexion con BBDD
-		Connection connection = null;
+		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sql)) {
 
-		// Vamos a lanzar una sentencia SQL contra la BBDD
-		// Result set va a contener todo lo que devuelve la BBDD
-		Statement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			// El Driver que vamos a usar
 			Class.forName(DBUtils.DRIVER);
 
-			// Abrimos la conexion con BBDD
-			connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
-
-			// Vamos a lanzar la sentencia...
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(sql);
-
-			// Recorremos resultSet, que tiene las filas de la tabla
 			while (resultSet.next()) {
-
-				// Hay al menos una fila en el cursos, inicializamos el ArrayList
-				if (null == ret)
-					ret = new ArrayList<Cliente>();
-
-				// El Alumno
 				Cliente cliente = new Cliente();
 
-				// Sacamos las columnas del resultSet
-				String dni = resultSet.getString("dni");
-//				String nombre = resultSet.getString("nombre");
-//				String apellidos = resultSet.getString("apellidos");
-//				String email = resultSet.getString("email");
-				String password = resultSet.getString("password");
+				cliente.setDni(resultSet.getString("dni"));
+				cliente.setNombre(resultSet.getString("nombre"));
+				cliente.setApellidos(resultSet.getString("apellidos"));
+				cliente.setEmail(resultSet.getString("email"));
+				cliente.setPassword(resultSet.getString("password_plain")); // Descifrada
 
-				// Metemos los datos en Alumno
-				cliente.setDni(dni);
-//				cliente.setNombre(nombre);
-//				cliente.setApellidos(apellidos);
-//				cliente.setEmail(email);
-				cliente.setPassword(password);
-
-				// Lo guardamos en la lista
 				ret.add(cliente);
 			}
+
 		} catch (SQLException sqle) {
 			System.out.println("Error con la BBDD - " + sqle.getMessage());
 		} catch (Exception e) {
 			System.out.println("Error generico - " + e.getMessage());
-		} finally {
-			// Cerramos al reves de como las abrimos
-			try {
-				if (resultSet != null)
-					resultSet.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
-			try {
-				if (statement != null)
-					statement.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
 		}
+
 		return ret;
 	}
 

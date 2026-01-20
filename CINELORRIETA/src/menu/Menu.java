@@ -1,136 +1,216 @@
 package menu;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-import gestores.GestorEntradas;
 import gestores.GestorPeliculas;
 import gestores.GestorSesiones;
+import gestores.GestosCompras;
+import pojos.Cliente;
+import pojos.Compra;
 import pojos.Entrada;
 import pojos.Pelicula;
 import pojos.Sesion;
 import utiles.Controladores;
 
 public class Menu {
-	Controladores con = null;
-	TextosMenu tex = null;
-	ArrayList<String> carro = null;
+
+	private Controladores con;
+	private TextosMenu tex;
+	private ArrayList<Entrada> carro;
 
 	public Menu() {
 		con = new Controladores();
 		tex = new TextosMenu();
+		carro = new ArrayList<>();
 	}
 
+	/**
+	 * Metodo que Inicializa la plicacion. No finaliza y es llamada por el launcher.
+	 */
 	public void inicio() {
 		do {
-			tex.bienbenida();
-			new Login().mostrar();
-			// Dentro de elegir pelicula llegas a elegir tambien la sesion de la palicula.
-			eleguirPelicula();
-
+			logearse();
+			Pelicula pelicula = elegirPelicula();
+			if (pelicula == null)
+				break;
+			Sesion sesion = elegirSesionPelicula(pelicula);
+			if (sesion == null)
+				break;
+			precioCarro(carro);
+//			 compras(cliente, carro);
 		} while (true);
 	}
 
+	/**
+	 * Metodo que te da la opcion de registarte o logearte agora o antes de pagar.
+	 */
+	public void logearse() {
+		Login log = new Login();
+		int opcion = 0;
+		tex.bienbenida();
+		do {
+			tex.loginInicio();
+			opcion = con.pideNumero("Qué opción deseas");
+			switch (opcion) {
+			case 1:
+				break;
+			case 2:
+				log.buscarSIclienteExiste();
+				break;
+			case 3:
+				log.registrase();
+				break;
+			default:
+				System.out.println("Opción no válida");
+			}
+		} while (opcion != 1);
+	}
+
+//------------------------------------------------------------------------------------------------
+
+	/**
+	 * Metodo que carga Todas las peliculas de la base de datos.
+	 * 
+	 * @return Peliculas
+	 */
 	private ArrayList<Pelicula> cargarPeliculas() {
 		GestorPeliculas dBAcces = new GestorPeliculas();
-		ArrayList<Pelicula> peliculas = dBAcces.getAllPeliculas();
-		return peliculas;
+		return dBAcces.getAllPeliculas();
 	}
 
-	private ArrayList<Sesion> cargarSesiones(int pelicula) {
-		GestorSesiones gSesiones = new GestorSesiones();
-		ArrayList<Sesion> sesiones = gSesiones.getAllSesiones(pelicula);
-		return sesiones;
-	}
-
+	/**
+	 * Metodo para leer todas las peliculas
+	 */
 	public void verTodasPeliculas() {
 		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		if (null == peliculas) {
-			System.out.println("No hay Peliculas");
-		} else {
-			for (int i = 0; i < peliculas.size(); i++) {
-				System.out.println(peliculas.get(i).getIdPelicula() + "  " + peliculas.get(i).getNombre());
-			}
-		}
+		if (peliculas == null || peliculas.isEmpty())
+			System.out.println("No hay películas");
+		else
+			for (Pelicula p : peliculas)
+				System.out.println(p.getIdPelicula() + "  " + p.getNombre());
 	}
 
-	private void eleguirPelicula() {
+	/**
+	 * Pide una pelicula que el usuario desee y la retorna
+	 * 
+	 * @return la pelicula que elige el usuario
+	 */
+	private Pelicula elegirPelicula() {
 		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		int ret = 0;
+		int id;
+		Pelicula peliElegida = null;
 		do {
 			verTodasPeliculas();
-			ret = con.pideNumero("Pulse 0 para terminar o eliga una Pelicula");
-			if (ret > peliculas.size()) {
-				System.out.println("No existe esa pelicula por favor compruevelo denuevo");
-			} else {
-				ret = encontrarPelicula(peliculas, ret);
-			}
-		} while (ret != 0);
-
+			id = con.pideNumero("Pulse 0 para salir o elija una película");
+			if (id == 0)
+				return null;
+			peliElegida = encontrarPeliculaPorId(peliculas, id);
+			if (peliElegida != null)
+				return peliElegida;
+			System.out.println("La película no existe, inténtelo de nuevo.");
+		} while (true);
 	}
 
-	private int encontrarPelicula(ArrayList<Pelicula> peliculas, int ret) {
-		for (int i = 0; i < peliculas.size(); i++) {
-			if (ret == peliculas.get(i).idPelicula) {
-				ret = 0;
-				elegirSesionPelicula(i);
-			}
-		}
-		return ret;
+	/**
+	 * Busca la pelicula por su id
+	 * 
+	 * @param peliculas donde tengo que buscar
+	 * @param idBuscado pelicula que quiere el usuario
+	 * @return
+	 */
+	private Pelicula encontrarPeliculaPorId(ArrayList<Pelicula> peliculas, int idBuscado) {
+		for (Pelicula ret : peliculas)
+			if (ret.getIdPelicula() == idBuscado)
+				return ret;
+		return null;
 	}
 
-	private void verSesionesPelicula(int pelicula) {
-		ArrayList<Sesion> sesion = cargarSesiones(pelicula);
-		if (null == sesion) {
-			System.out.println("No hay Peliculas");
-		} else {
-			for (int i = 0; i < sesion.size(); i++) {
-				System.out.println(sesion.get(i).toStringSimple());
-			}
-		}
+//------------------------------------------------------------------------------------------------
+
+	private ArrayList<Sesion> cargarSesiones(int idPelicula) {
+		GestorSesiones gSesiones = new GestorSesiones();
+		return gSesiones.getAllSesiones(idPelicula);
 	}
 
-	private Sesion elegirSesionPelicula(int pelicula) {
-		ArrayList<Sesion> sesiones = cargarSesiones(pelicula);
-		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		int sesion = 0;
-		Sesion ret = null;
+	private void mostrarSesiones(Pelicula pelicula) {
+		System.out.println("Sesiones disponibles para " + pelicula.getNombre() + ":");
+		verSesionesPelicula(pelicula.getIdPelicula());
+	}
+
+	private Sesion encontrarSesionPorId(ArrayList<Sesion> sesiones, int idBuscado) {
+		for (Sesion sesion : sesiones)
+			if (sesion.getIdSesion() == idBuscado)
+				return sesion;
+		return null;
+	}
+
+	private void verSesionesPelicula(int idPelicula) {
+		ArrayList<Sesion> sesiones = cargarSesiones(idPelicula);
+		if (sesiones == null || sesiones.isEmpty())
+			System.out.println("No hay sesiones");
+		else
+			for (Sesion sesion : sesiones)
+				System.out.println(sesion.toStringSimple());
+	}
+
+	private Sesion elegirSesionPelicula(Pelicula pelicula) {
+		ArrayList<Sesion> sesiones = cargarSesiones(pelicula.getIdPelicula());
+		if (sesiones == null || sesiones.isEmpty())
+			return null;
+		int idSesion;
+		Sesion sesionElegida = null;
 		do {
-			System.out.println(peliculas.get(pelicula));
-			verSesionesPelicula(pelicula);
-			sesion = con.pideNumero("Pulse 0 para terminar o eliga una Sesion");
-			ret = encontrarSesion(sesiones, sesion, ret);
-			if (ret == null) {
-				System.out.println("Sesion no encontrada");
-			} else {
-				sesion = 0;
-			}
-		} while (sesion != 0);
-		return ret;
+			mostrarSesiones(pelicula);
+			idSesion = con.pideNumero("Pulse 0 para terminar o elija una sesión");
+			if (idSesion == 0)
+				return null;
+			sesionElegida = encontrarSesionPorId(sesiones, idSesion);
+			if (sesionElegida != null)
+				return sesionElegida;
+			System.out.println("Sesión no encontrada, inténtelo de nuevo.");
+		} while (true);
 	}
 
-	private Sesion encontrarSesion(ArrayList<Sesion> sesiones, int sesion, Sesion ret) {
-		for (int i = 0; i < sesiones.size(); i++) {
-			if (sesion == sesiones.get(i).idSesion) {
-				ret = sesiones.get(i);
-			}
+//------------------------------------------------------------------------------------------------
+	private double precioCarro(ArrayList<Entrada> carro) {
+		double total = 0;
+		for (Entrada entrada : carro)
+			total += entrada.getPrecio();
+		return total;
+	}
+
+	private double descuentoTotal(ArrayList<Entrada> carro) {
+		ArrayList<Integer> peliculasDistintas = new ArrayList<>();
+		int totalEntradas = 0;
+		for (Entrada entrada : carro) {
+			int idPeli = entrada.getSesion().getPeli().getIdPelicula();
+			if (!peliculasDistintas.contains(idPeli))
+				peliculasDistintas.add(idPeli);
+			totalEntradas += entrada.getNumPersonas();
 		}
+		if (peliculasDistintas.size() >= 2)
+			return 0.20;
+		else if (totalEntradas >= 3)
+			return 0.30;
+		return 0;
+	}
+
+	private Compra compras(Cliente cliente, ArrayList<Entrada> carro) {
+		GestosCompras gc = new GestosCompras();
+		Compra ret = new Compra();
+		ret.setFechaHora(LocalDate.now());
+		ret.setCli(cliente);
+		double totalCarrito = precioCarro(carro);
+		double descuento = descuentoTotal(carro);
+		for (Entrada entrada : carro) {
+			double descuentoEntrada = entrada.getPrecio() * descuento;
+			entrada.setDescuento(descuentoEntrada);
+			entrada.setPrecio(entrada.getPrecio() - descuentoEntrada);
+		}
+		double totalFinal = totalCarrito * (1 - descuento);
+		ret.setPrecioTotal(totalFinal);
+		gc.insertCompra(ret);
 		return ret;
 	}
-
-	public void entrada(Sesion sesion) {
-		GestorEntradas dBAcces = new GestorEntradas();
-		Entrada entrada = new Entrada();
-		int personas = con.pideNumero("Para cuantas personas quieres la entrada");
-		entrada.setNumPersonas(personas);
-		double precioTotal = personas * sesion.getPrecio();
-		entrada.setPrecio(precioTotal);
-		entrada.setSesion(sesion);
-		dBAcces.insertarEntrada(entrada);
-
-	}
-
-//	private void printEntrada(Sesion sesion, Entrada entrada) {
-//
-//	}
-
-}// FIN =P
+}

@@ -2,6 +2,8 @@ package gestores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -17,36 +19,27 @@ public class GestorEntradas {
 	 */
 	public void insertarEntrada(Entrada entrada) {
 
-		Connection connection = null;
-		Statement statement = null;
+		String sql = "INSERT INTO entrada(numPersonas, precio, idSesion) VALUES (?, ?, ?)";
 
-		try {
-			Class.forName(DBUtils.DRIVER);
-			connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
-			statement = connection.createStatement();
+		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
+				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+		// Esto permite obtener el ID generado
+		) {
 
-			String sql = "INSERT INTO entrada(numPersonas,precio,idSesion)VALUES(" + entrada.getNumPersonas() + ", "
-					+ entrada.getPrecio() + ", " + entrada.getSesion().getIdSesion() + " )";
+			ps.setInt(1, entrada.getNumPersonas());
+			ps.setDouble(2, entrada.getPrecio()); // O BigDecimal PERO NS LO TOCO
+			ps.setInt(3, entrada.getSesion().getIdSesion());
 
-			statement.executeUpdate(sql);
+			ps.executeUpdate();
 
-		} catch (SQLException sqle) {
-			System.out.println("Error con la BBDD - " + sqle.getMessage());
-		} catch (Exception e) {
-			System.out.println("Error generico - " + e.getMessage());
-		} finally {
-			try {
-				if (statement != null)
-					statement.close();
-			} catch (Exception e) {
-				// No hace falta
+			// Recuperar el id autogenerado
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				entrada.setIdEntrada(rs.getInt(1));
 			}
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (Exception e) {
-				// No hace falta
-			}
+
+		} catch (SQLException e) {
+			System.out.println("Error con la BBDD - " + e.getMessage());
 		}
 	}
 

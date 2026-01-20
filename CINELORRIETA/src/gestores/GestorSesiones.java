@@ -14,8 +14,9 @@ import utiles.DBUtils;
 public class GestorSesiones {
 
 	/**
-	 * Retorna todas las sesiones de una película. Devuelve una lista vacía si no
-	 * hay sesiones.
+	 * 
+	 * @Retorna todas las sesiones de una película. Devuelve una lista vacía si no
+	 *          hay sesiones.
 	 */
 	public ArrayList<Sesion> getAllSesiones(int pelicula) {
 		ArrayList<Sesion> ret = new ArrayList<>();
@@ -26,7 +27,6 @@ public class GestorSesiones {
 				WHERE idPelicula = ?
 				ORDER BY FechaIni ASC
 				""";
-
 		try {
 			Class.forName(DBUtils.DRIVER);
 
