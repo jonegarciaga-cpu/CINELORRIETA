@@ -23,7 +23,8 @@ public class Menu {
 	 */
 	public void inicio() {
 		do {
-			logearse();
+			bienbenida();
+
 			Pelicula pelicula = pelis.elegirPelicula();
 			if (pelicula == null) {
 				break;
@@ -32,6 +33,7 @@ public class Menu {
 			if (sesion == null) {
 				break;
 			}
+			logearse();
 			pago.crearEntradatemp(sesion);
 
 		} while (true);
@@ -43,7 +45,6 @@ public class Menu {
 	public void logearse() {
 		Login log = new Login();
 		int opcion = 0;
-		bienbenida();
 		Cliente cliente = null;
 		do {
 			loginInicio();
@@ -77,7 +78,7 @@ public class Menu {
 
 	public void loginInicio() {
 		System.out.println("----Menu----");
-		System.out.println("1 SALIR o HACER LUEGO");
+		System.out.println("1 SALIR");
 		System.out.println("2 INICIAR");
 		System.out.println("3 REGISTRAR");
 		System.out.println("4 PAGAR");
