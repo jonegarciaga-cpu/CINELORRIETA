@@ -1,136 +1,86 @@
 package menu;
 
-import java.util.ArrayList;
-
-import gestores.GestorEntradas;
-import gestores.GestorPeliculas;
-import gestores.GestorSesiones;
-import pojos.Entrada;
+import pojos.Cliente;
 import pojos.Pelicula;
 import pojos.Sesion;
 import utiles.Controladores;
 
 public class Menu {
-	Controladores con = null;
-	TextosMenu tex = null;
-	ArrayList<String> carro = null;
+	private Controladores con;
+	private Peliculas pelis;
+	private Sesiones ses;
+	private EntradasPago pago;
 
 	public Menu() {
 		con = new Controladores();
-		tex = new TextosMenu();
+		pelis = new Peliculas();
+		ses = new Sesiones();
+		pago = new EntradasPago();
 	}
 
+	/**
+	 * Metodo que Inicializa la plicacion. No finaliza y es llamada por el launcher.
+	 */
 	public void inicio() {
 		do {
-			tex.bienbenida();
-			new Login().mostrar();
-			// Dentro de elegir pelicula llegas a elegir tambien la sesion de la palicula.
-			eleguirPelicula();
+			logearse();
+			Pelicula pelicula = pelis.elegirPelicula();
+			if (pelicula == null) {
+				break;
+			}
+			Sesion sesion = ses.elegirSesionPelicula(pelicula);
+			if (sesion == null) {
+				break;
+			}
+			pago.crearEntradatemp(sesion);
 
 		} while (true);
 	}
 
-	private ArrayList<Pelicula> cargarPeliculas() {
-		GestorPeliculas dBAcces = new GestorPeliculas();
-		ArrayList<Pelicula> peliculas = dBAcces.getAllPeliculas();
-		return peliculas;
-	}
-
-	private ArrayList<Sesion> cargarSesiones(int pelicula) {
-		GestorSesiones gSesiones = new GestorSesiones();
-		ArrayList<Sesion> sesiones = gSesiones.getAllSesiones(pelicula);
-		return sesiones;
-	}
-
-	public void verTodasPeliculas() {
-		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		if (null == peliculas) {
-			System.out.println("No hay Peliculas");
-		} else {
-			for (int i = 0; i < peliculas.size(); i++) {
-				System.out.println(peliculas.get(i).getIdPelicula() + "  " + peliculas.get(i).getNombre());
-			}
-		}
-	}
-
-	private void eleguirPelicula() {
-		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		int ret = 0;
+	/**
+	 * Metodo que te da la opcion de registarte o logearte agora o antes de pagar.
+	 */
+	public void logearse() {
+		Login log = new Login();
+		int opcion = 0;
+		bienbenida();
+		Cliente cliente = null;
 		do {
-			verTodasPeliculas();
-			ret = con.pideNumero("Pulse 0 para terminar o eliga una Pelicula");
-			if (ret > peliculas.size()) {
-				System.out.println("No existe esa pelicula por favor compruevelo denuevo");
-			} else {
-				ret = encontrarPelicula(peliculas, ret);
+			loginInicio();
+			opcion = con.pideNumero("Qué opción deseas");
+			switch (opcion) {
+			case 1:
+				break;
+			case 2:
+				cliente = log.buscarSIclienteExiste();
+				break;
+			case 3:
+				log.registrase();
+				break;
+			case 4:
+				pago.pagar(cliente);
+				break;
+			default:
+				System.out.println("Opción no válida");
 			}
-		} while (ret != 0);
-
+		} while (opcion != 1);
 	}
 
-	private int encontrarPelicula(ArrayList<Pelicula> peliculas, int ret) {
-		for (int i = 0; i < peliculas.size(); i++) {
-			if (ret == peliculas.get(i).idPelicula) {
-				ret = 0;
-				elegirSesionPelicula(i);
-			}
-		}
-		return ret;
+	private void bienbenida() {
+		System.out.println("");
+		System.out.println("");
+		System.out.println("BIENVENIDO A");
+		System.out.println("CINELORRIETA");
+		System.out.println("");
+		System.out.println("");
 	}
 
-	private void verSesionesPelicula(int pelicula) {
-		ArrayList<Sesion> sesion = cargarSesiones(pelicula);
-		if (null == sesion) {
-			System.out.println("No hay Peliculas");
-		} else {
-			for (int i = 0; i < sesion.size(); i++) {
-				System.out.println(sesion.get(i).toStringSimple());
-			}
-		}
-	}
-
-	private Sesion elegirSesionPelicula(int pelicula) {
-		ArrayList<Sesion> sesiones = cargarSesiones(pelicula);
-		ArrayList<Pelicula> peliculas = cargarPeliculas();
-		int sesion = 0;
-		Sesion ret = null;
-		do {
-			System.out.println(peliculas.get(pelicula));
-			verSesionesPelicula(pelicula);
-			sesion = con.pideNumero("Pulse 0 para terminar o eliga una Sesion");
-			ret = encontrarSesion(sesiones, sesion, ret);
-			if (ret == null) {
-				System.out.println("Sesion no encontrada");
-			} else {
-				sesion = 0;
-			}
-		} while (sesion != 0);
-		return ret;
-	}
-
-	private Sesion encontrarSesion(ArrayList<Sesion> sesiones, int sesion, Sesion ret) {
-		for (int i = 0; i < sesiones.size(); i++) {
-			if (sesion == sesiones.get(i).idSesion) {
-				ret = sesiones.get(i);
-			}
-		}
-		return ret;
-	}
-
-	public void entrada(Sesion sesion) {
-		GestorEntradas dBAcces = new GestorEntradas();
-		Entrada entrada = new Entrada();
-		int personas = con.pideNumero("Para cuantas personas quieres la entrada");
-		entrada.setNumPersonas(personas);
-		double precioTotal = personas * sesion.getPrecio();
-		entrada.setPrecio(precioTotal);
-		entrada.setSesion(sesion);
-		dBAcces.insertarEntrada(entrada);
+	public void loginInicio() {
+		System.out.println("----Menu----");
+		System.out.println("1 SALIR o HACER LUEGO");
+		System.out.println("2 INICIAR");
+		System.out.println("3 REGISTRAR");
+		System.out.println("4 PAGAR");
 
 	}
-
-//	private void printEntrada(Sesion sesion, Entrada entrada) {
-//
-//	}
-
-}// FIN =P
+}

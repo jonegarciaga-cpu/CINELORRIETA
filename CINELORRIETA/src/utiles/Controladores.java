@@ -71,10 +71,5 @@ public class Controladores {
 		System.out.print(text);
 		ret = sc.nextLine();
 		return ret;
-	}
-
-//	for (int num : numbers) {
-//	      System.out.println(num);
-//	    }
-	
+	}	
 }

@@ -1,12 +1,12 @@
 package pojos;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Compra {
 
 	public int idCompra = 0;
-	private Date fechaHora = null;
+	private LocalDate fechaHora = null;
 	private double precioTotal = 0;
 	private double descuento = 0;
 	private Cliente cli = null;
@@ -19,11 +19,11 @@ public class Compra {
 		this.idCompra = idCompra;
 	}
 
-	public Date getFechaHora() {
+	public LocalDate getFechaHora() {
 		return fechaHora;
 	}
 
-	public void setFechaHora(Date fechaHora) {
+	public void setFechaHora(LocalDate fechaHora) {
 		this.fechaHora = fechaHora;
 	}
 

@@ -8,26 +8,14 @@ import utiles.Controladores;
 
 public class Login {
 
-	Controladores con = new Controladores();
+	private Controladores con = null;
 
-	public void mostrar() {
-		int opcion = 0;
-		do {
-			new menu.TextosMenu().loginInicio();
-			opcion = con.pideNumero("Que opcion deseas");
-			switch (opcion) {
-			case 1:
-				break;
-			case 2:
-				buscarSIclienteExiste();
-				break;
-			case 3:
-				registrase();
-				break;
-			default:
-				System.out.println("Opcion no valido");
-			}
-		} while (opcion != 1);
+	private static String mayusculas = ".*[A-Z].*";
+	private static String minusculas = ".*[a-z].*";
+	private static String numeros = ".*\\d.*";
+	
+	public Login() {
+		con = new Controladores();
 	}
 
 	/**
@@ -42,16 +30,13 @@ public class Login {
 		String ret;
 		do {
 			ret = con.leerDeTeclado("Introduce un correo Gmail: ").toLowerCase();
-		} while (!ret.matches("\\w+@\\w+\\.\\w+"));
+		} while (!ret.matches("[a-z0-9._%+-]+@gmail\\.com"));
 
 		return ret;
 	}
 
 	private String pedirContraseña() {
 		String ret;
-		String mayusculas = ".*[A-Z].*";
-		String minusculas = ".*[a-z].*";
-		String numeros = ".*\\d.*";
 
 		do {
 			ret = con.leerDeTeclado("Introduce una contraseña: ");
@@ -61,7 +46,7 @@ public class Login {
 		return ret;
 	}
 
-	public static boolean validarDNI(String dni) {
+	private static boolean validarDNI(String dni) {
 		if (dni == null || dni.length() != 9) {
 			return false;
 		}
@@ -95,9 +80,9 @@ public class Login {
 		return "Cliente [dni=" + dni + ", password=" + pssword + "]";
 	}
 
-	public boolean buscarSIclienteExiste() {
+	public Cliente buscarSIclienteExiste() {
 		String cliente = iniciar();
-		boolean ret = false;
+		Cliente ret = null;
 		GestorClientes dBAcces = new GestorClientes();
 		ArrayList<Cliente> clientes = dBAcces.getAllClientes();
 
@@ -107,27 +92,33 @@ public class Login {
 			for (int i = 0; i < clientes.size(); i++) {
 				if (clientes.get(i).toStringSimple().equals(cliente)) {
 					System.out.println("BIENVENIDO DE VUELTA");
-					ret = true;
+					ret = clientes.get(i);
 				}
 			}
 		}
 		return ret;
 	}
 
-	private void registrase() {
+	public void registrase() {
 		GestorClientes dBAcces = new GestorClientes();
 		Cliente cliente = new Cliente();
+		
 		String dni = pedirDNI();
 		cliente.setDni(dni);
+		
 		String nombre = con.leerDeTeclado("Nombre: ");
 		cliente.setNombre(nombre);
+		
 		String apellido = con.leerDeTeclado("Apellido: ");
 		cliente.setApellidos(apellido);
+		
 		String gmail = pedirGmail();
 		cliente.setEmail(gmail);
+		
 		String pssword = pedirContraseña();
 		cliente.setPassword(pssword);
-		dBAcces.insertEjemplo(cliente);
+		
+		dBAcces.insertCliente(cliente);
 	}
 
-}// FIN
+}
