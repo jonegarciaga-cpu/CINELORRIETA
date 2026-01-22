@@ -1,4 +1,4 @@
-package pojos;
+package bbdd_Pojos;
 
 import java.time.LocalDate;
 import java.util.Objects;

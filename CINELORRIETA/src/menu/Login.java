@@ -2,8 +2,8 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.GestorClientes;
-import pojos.Cliente;
+import bbdd_Gestores.GestorClientes;
+import bbdd_Pojos.Cliente;
 import utiles.Controladores;
 
 public class Login {

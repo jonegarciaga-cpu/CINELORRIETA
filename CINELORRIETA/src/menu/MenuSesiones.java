@@ -2,15 +2,15 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.GestorSesiones;
-import pojos.Pelicula;
-import pojos.Sesion;
+import bbdd_Gestores.GestorSesiones;
+import bbdd_Pojos.Pelicula;
+import bbdd_Pojos.Sesion;
 import utiles.Controladores;
 
-public class Sesiones {
+public class MenuSesiones {
 	Controladores con = null;
 
-	public Sesiones() {
+	public MenuSesiones() {
 		con = new Controladores();
 	}
 

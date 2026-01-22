@@ -2,15 +2,15 @@ package menu;
 
 import java.util.ArrayList;
 
-import gestores.GestorPeliculas;
-import pojos.Pelicula;
+import bbdd_Gestores.GestorPeliculas;
+import bbdd_Pojos.Pelicula;
 import utiles.Controladores;
 
-public class Peliculas {
+public class MenuPeliculas {
 
 	Controladores con = null;
 
-	public Peliculas() {
+	public MenuPeliculas() {
 		con = new Controladores();
 	}
 

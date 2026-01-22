@@ -1,4 +1,4 @@
-package gestores;
+package bbdd_Gestores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import pojos.Pelicula;
-import pojos.Sesion;
+import bbdd_Pojos.Pelicula;
+import bbdd_Pojos.Sesion;
 import utiles.DBUtils;
 
 public class GestorSesiones {

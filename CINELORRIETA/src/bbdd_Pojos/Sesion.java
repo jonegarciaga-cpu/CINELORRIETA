@@ -1,4 +1,4 @@
-package pojos;
+package bbdd_Pojos;
 
 import java.sql.Date;
 import java.sql.Timestamp;

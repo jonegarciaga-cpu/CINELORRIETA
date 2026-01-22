@@ -3,20 +3,20 @@ package menu;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import gestores.GestorEntradas;
-import gestores.GestosCompras;
-import pojos.Cliente;
-import pojos.Compra;
-import pojos.Entrada;
-import pojos.Sesion;
+import bbdd_Gestores.GestorEntradas;
+import bbdd_Gestores.GestosCompras;
+import bbdd_Pojos.Cliente;
+import bbdd_Pojos.Compra;
+import bbdd_Pojos.Entrada;
+import bbdd_Pojos.Sesion;
 import utiles.Controladores;
 
-public class EntradasPago {
+public class MenuEntradasPago {
 
 	private Controladores con;
 	private ArrayList<Entrada> carro;
 
-	public EntradasPago() {
+	public MenuEntradasPago() {
 		con = new Controladores();
 		carro = new ArrayList<>();
 	}

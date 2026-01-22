@@ -1,21 +1,21 @@
 package menu;
 
-import pojos.Cliente;
-import pojos.Pelicula;
-import pojos.Sesion;
+import bbdd_Pojos.Cliente;
+import bbdd_Pojos.Pelicula;
+import bbdd_Pojos.Sesion;
 import utiles.Controladores;
 
 public class Menu {
 	private Controladores con;
-	private Peliculas pelis;
-	private Sesiones ses;
-	private EntradasPago pago;
+	private MenuPeliculas pelis;
+	private MenuSesiones ses;
+	private MenuEntradasPago pago;
 
 	public Menu() {
 		con = new Controladores();
-		pelis = new Peliculas();
-		ses = new Sesiones();
-		pago = new EntradasPago();
+		pelis = new MenuPeliculas();
+		ses = new MenuSesiones();
+		pago = new MenuEntradasPago();
 	}
 
 	/**

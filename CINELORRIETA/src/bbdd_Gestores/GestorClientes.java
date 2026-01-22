@@ -1,4 +1,4 @@
-package gestores;
+package bbdd_Gestores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import pojos.Cliente;
+import bbdd_Pojos.Cliente;
 import utiles.DBUtils;
 
 public class GestorClientes {

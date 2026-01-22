@@ -1,4 +1,4 @@
-package gestores;
+package bbdd_Gestores;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pojos.Entrada;
+import bbdd_Pojos.Entrada;
 import utiles.DBUtils;
 
 public class GestorEntradas {
