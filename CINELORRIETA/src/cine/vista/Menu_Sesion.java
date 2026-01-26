@@ -1,28 +1,18 @@
-package menu;
+package cine.vista;
 
 import java.util.ArrayList;
 
-import bbdd_Gestores.GestorSesiones;
-import bbdd_Pojos.Pelicula;
-import bbdd_Pojos.Sesion;
-import utiles.Controladores;
+import cine.controlador.Controlador;
+import cine.modelo.pojos.Pelicula;
+import cine.modelo.pojos.Sesion;
 
-public class MenuSesiones {
-	Controladores con = null;
+public class Menu_Sesion {
+	private Controlador controlador = null;
+	private Teclado teclado = null;
 
-	public MenuSesiones() {
-		con = new Controladores();
-	}
-
-	/**
-	 * Metodo que carga las sesiones de una pelicula en concreto.
-	 * 
-	 * @param idPelicula de la pelicula
-	 * @return las sesiones de la pelicula
-	 */
-	private ArrayList<Sesion> cargarSesiones(int idPelicula) {
-		GestorSesiones gSesiones = new GestorSesiones();
-		return gSesiones.getAllSesiones(idPelicula);
+	public Menu_Sesion() {
+		controlador = new Controlador();
+		teclado = new Teclado();
 	}
 
 	/**
@@ -57,7 +47,7 @@ public class MenuSesiones {
 	 *                   sesiones
 	 */
 	private void verSesionesPelicula(int idPelicula) {
-		ArrayList<Sesion> sesiones = cargarSesiones(idPelicula);
+		ArrayList<Sesion> sesiones = controlador.cargarSesiones(idPelicula);
 		if (sesiones == null || sesiones.isEmpty())
 			System.out.println("No hay sesiones");
 		else
@@ -72,14 +62,14 @@ public class MenuSesiones {
 	 * @return la sesion elejida y la pelicula a la que pertenece
 	 */
 	public Sesion elegirSesionPelicula(Pelicula pelicula) {
-		ArrayList<Sesion> sesiones = cargarSesiones(pelicula.getIdPelicula());
+		ArrayList<Sesion> sesiones = controlador.cargarSesiones(pelicula.getIdPelicula());
 		if (sesiones == null || sesiones.isEmpty())
 			return null;
 		int idSesion;
 		Sesion sesionElegida = null;
 		do {
 			mostrarSesiones(pelicula);
-			idSesion = con.pideNumero("Pulse 0 para terminar o elija una sesión");
+			idSesion = teclado.pideNumero("Pulse 0 para terminar o elija una sesión");
 			if (idSesion == 0)
 				return null;
 			sesionElegida = encontrarSesionPorId(sesiones, idSesion);
@@ -88,4 +78,5 @@ public class MenuSesiones {
 			System.out.println("Sesión no encontrada, inténtelo de nuevo.");
 		} while (true);
 	}
+
 }

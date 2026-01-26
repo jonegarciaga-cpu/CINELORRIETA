@@ -1,21 +1,20 @@
-package menu;
+package cine.vista;
 
 import java.util.ArrayList;
 
-import bbdd_Gestores.GestorClientes;
-import bbdd_Pojos.Cliente;
-import utiles.Controladores;
+import cine.modelo.dao.GestorClientes;
+import cine.modelo.pojos.Cliente;
 
-public class Login {
+public class Menu_Login {
 
-	private Controladores con = null;
+	private Teclado con = null;
 
 	private static String mayusculas = ".*[A-Z].*";
 	private static String minusculas = ".*[a-z].*";
 	private static String numeros = ".*\\d.*";
-	
-	public Login() {
-		con = new Controladores();
+
+	public Menu_Login() {
+		con = new Teclado();
 	}
 
 	/**
@@ -99,26 +98,27 @@ public class Login {
 		return ret;
 	}
 
-	public void registrase() {
+	public Cliente registrase() {
 		GestorClientes dBAcces = new GestorClientes();
 		Cliente cliente = new Cliente();
-		
+
 		String dni = pedirDNI();
 		cliente.setDni(dni);
-		
+
 		String nombre = con.leerDeTeclado("Nombre: ");
 		cliente.setNombre(nombre);
-		
+
 		String apellido = con.leerDeTeclado("Apellido: ");
 		cliente.setApellidos(apellido);
-		
+
 		String gmail = pedirGmail();
 		cliente.setEmail(gmail);
-		
+
 		String pssword = pedirContraseña();
 		cliente.setPassword(pssword);
-		
+
 		dBAcces.insertCliente(cliente);
+		return cliente;
 	}
 
 }

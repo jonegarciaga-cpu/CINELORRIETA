@@ -1,4 +1,4 @@
-package bbdd_Pojos;
+package cine.modelo.pojos;
 
 import java.time.LocalDate;
 import java.util.Objects;

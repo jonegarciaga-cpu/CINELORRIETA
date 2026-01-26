@@ -1,4 +1,4 @@
-package bbdd_Gestores;
+package cine.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import bbdd_Pojos.Entrada;
-import utiles.DBUtils;
+import cine.modelo.pojos.Entrada;
+import cine.modelo.utils.DBUtils;
 
 public class GestorEntradas {
 

@@ -1,8 +1,9 @@
-package utiles;
+package cine.vista;
 
 import java.util.Scanner;
 
-public class Controladores {
+public class Teclado {
+	
 	private Scanner sc = new Scanner(System.in);
 
 	public int pideNumero(String text) {

@@ -1,4 +1,4 @@
-package bbdd_Gestores;
+package cine.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
-import bbdd_Pojos.Compra;
-import utiles.DBUtils;
+import cine.modelo.pojos.Compra;
+import cine.modelo.utils.DBUtils;
 
 public class GestosCompras {
 	/**

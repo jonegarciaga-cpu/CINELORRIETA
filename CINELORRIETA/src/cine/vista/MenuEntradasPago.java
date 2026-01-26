@@ -1,34 +1,46 @@
-package menu;
+package cine.vista;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import bbdd_Gestores.GestorEntradas;
-import bbdd_Gestores.GestosCompras;
-import bbdd_Pojos.Cliente;
-import bbdd_Pojos.Compra;
-import bbdd_Pojos.Entrada;
-import bbdd_Pojos.Sesion;
-import utiles.Controladores;
+import cine.modelo.dao.GestorEntradas;
+import cine.modelo.dao.GestosCompras;
+import cine.modelo.pojos.Cliente;
+import cine.modelo.pojos.Compra;
+import cine.modelo.pojos.Entrada;
+import cine.modelo.pojos.Sesion;
 
 public class MenuEntradasPago {
 
-	private Controladores con;
+	private Teclado controladores;
 	private ArrayList<Entrada> carro;
 
 	public MenuEntradasPago() {
-		con = new Controladores();
-		carro = new ArrayList<>();
+		controladores = new Teclado();
+		carro = new ArrayList<Entrada>();
 	}
 
-	private double precioCarro(ArrayList<Entrada> carro) {
+	/**
+	 * Recorre carro y va sumando los precios de las entradas de el carro
+	 * 
+	 * @param carro
+	 * @return total de el precio de entradas
+	 */
+	private double precioCarro() {
 		double total = 0;
 		for (Entrada entrada : carro)
 			total += entrada.getPrecio();
 		return total;
 	}
 
-	private double descuentoTotal(ArrayList<Entrada> carro) {
+	/**
+	 * Recorre el carro contando las diferentes peliculas para saber el descueno que
+	 * te corresponde
+	 * 
+	 * @param carro
+	 * @return descuento:0.30, 0.20 o 0
+	 */
+	private double descuentoTotal() {
 		ArrayList<Integer> peliculasDistintas = new ArrayList<>();
 		int totalEntradas = 0;
 		for (Entrada entrada : carro) {
@@ -37,28 +49,31 @@ public class MenuEntradasPago {
 				peliculasDistintas.add(idPeli);
 			totalEntradas += entrada.getNumPersonas();
 		}
-		if (peliculasDistintas.size() >= 2)
-			return 0.20;
-		else if (totalEntradas >= 3)
+		if (totalEntradas >= 3)
 			return 0.30;
+		else if (peliculasDistintas.size() >= 2)
+			return 0.20;
 		return 0;
 	}
 
-	private Compra compras(Cliente cliente, ArrayList<Entrada> carro) {
-		GestosCompras gc = new GestosCompras();
+	private Compra compras(Cliente cliente) {
+		GestosCompras gestor = new GestosCompras();
 		Compra ret = new Compra();
+
 		ret.setFechaHora(LocalDate.now());
 		ret.setCli(cliente);
-		double totalCarrito = precioCarro(carro);
-		double descuento = descuentoTotal(carro);
+
+		double descuento = descuentoTotal();
 		for (Entrada entrada : carro) {
 			double descuentoEntrada = entrada.getPrecio() * descuento;
 			entrada.setDescuento(descuentoEntrada);
 			entrada.setPrecio(entrada.getPrecio() - descuentoEntrada);
 		}
-		double totalFinal = totalCarrito * (1 - descuento);
+
+		double totalFinal = precioCarro();
 		ret.setPrecioTotal(totalFinal);
-		gc.insertCompra(ret);
+
+		gestor.insertCompra(ret);
 		return ret;
 	}
 
@@ -73,7 +88,7 @@ public class MenuEntradasPago {
 	public void pagar(Cliente cliente) {
 		if (cliente != null) {
 			System.out.println(carro);
-			Compra compra = compras(cliente, carro);
+			Compra compra = compras(cliente);
 			entradas(carro, compra);
 			carro.clear(); // Vaciar carro después del pago
 			System.out.println("Compra realizada con éxito.");
@@ -82,8 +97,8 @@ public class MenuEntradasPago {
 		}
 	}
 
-	public void crearEntradatemp(Sesion sesion) {
-		int numPersonas = con.pideNumero("¿Para cuantos quieres la entrada?");
+	public ArrayList<Entrada> crearEntradaTemp(Sesion sesion) {
+		int numPersonas = controladores.pideNumero("¿Para cuantos quieres la entrada?");
 		double precioUna = sesion.getPrecio();
 
 		Entrada entrada = new Entrada();
@@ -92,8 +107,9 @@ public class MenuEntradasPago {
 		entrada.setPrecio(precioUna * numPersonas);
 
 		carro.add(entrada);
-
 		System.out.println("Entrada añadida al carrito");
+		return carro;
+
 	}
 
 }
