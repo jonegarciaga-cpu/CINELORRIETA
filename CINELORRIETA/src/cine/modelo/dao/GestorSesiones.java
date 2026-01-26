@@ -1,4 +1,4 @@
-package gestores;
+package cine.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import pojos.Pelicula;
-import pojos.Sesion;
-import utiles.DBUtils;
+import cine.modelo.pojos.Pelicula;
+import cine.modelo.pojos.Sesion;
+import cine.modelo.utils.DBUtils;
 
 public class GestorSesiones {
 

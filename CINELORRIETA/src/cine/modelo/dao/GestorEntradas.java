@@ -1,4 +1,4 @@
-package gestores;
+package cine.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pojos.Entrada;
-import utiles.DBUtils;
+import cine.modelo.pojos.Entrada;
+import cine.modelo.utils.DBUtils;
 
 public class GestorEntradas {
 
@@ -19,7 +19,7 @@ public class GestorEntradas {
 	 */
 	public void insertarEntrada(Entrada entrada) {
 
-		String sql = "INSERT INTO entrada(numPersonas, precio, idSesion) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO entrada(numPersonas, precio, descuento, idSesion, idCompra) VALUES (?, ?, ?, ?, ?)";
 
 		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
@@ -27,8 +27,10 @@ public class GestorEntradas {
 		) {
 
 			ps.setInt(1, entrada.getNumPersonas());
-			ps.setDouble(2, entrada.getPrecio()); // O BigDecimal PERO NS LO TOCO
-			ps.setInt(3, entrada.getSesion().getIdSesion());
+			ps.setDouble(2, entrada.getPrecio()); // O BigDecimal PERO NS NO LO TOCO
+			ps.setDouble(3, entrada.getDescuento());
+			ps.setInt(4, entrada.getSesion().getIdSesion());
+			ps.setInt(5, entrada.getCompra().getIdCompra());
 
 			ps.executeUpdate();
 

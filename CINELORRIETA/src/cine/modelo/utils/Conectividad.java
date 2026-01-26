@@ -1,4 +1,4 @@
-package utiles;
+package cine.modelo.utils;
 
 public class Conectividad {
 

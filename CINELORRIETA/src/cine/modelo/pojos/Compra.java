@@ -1,4 +1,4 @@
-package pojos;
+package cine.modelo.pojos;
 
 import java.time.LocalDate;
 import java.util.Objects;

@@ -1,17 +1,20 @@
-package menu;
+package cine.vista;
 
 import java.util.ArrayList;
 
-import gestores.GestorClientes;
-import pojos.Cliente;
-import utiles.Controladores;
+import cine.modelo.dao.GestorClientes;
+import cine.modelo.pojos.Cliente;
 
-public class Login {
+public class Menu_Login {
 
-	Controladores con = null;
+	private Teclado con = null;
 
-	public Login() {
-		con = new Controladores();
+	private static String mayusculas = ".*[A-Z].*";
+	private static String minusculas = ".*[a-z].*";
+	private static String numeros = ".*\\d.*";
+
+	public Menu_Login() {
+		con = new Teclado();
 	}
 
 	/**
@@ -33,9 +36,6 @@ public class Login {
 
 	private String pedirContraseña() {
 		String ret;
-		String mayusculas = ".*[A-Z].*";
-		String minusculas = ".*[a-z].*";
-		String numeros = ".*\\d.*";
 
 		do {
 			ret = con.leerDeTeclado("Introduce una contraseña: ");
@@ -79,9 +79,9 @@ public class Login {
 		return "Cliente [dni=" + dni + ", password=" + pssword + "]";
 	}
 
-	public boolean buscarSIclienteExiste() {
+	public Cliente buscarSIclienteExiste() {
 		String cliente = iniciar();
-		boolean ret = false;
+		Cliente ret = null;
 		GestorClientes dBAcces = new GestorClientes();
 		ArrayList<Cliente> clientes = dBAcces.getAllClientes();
 
@@ -91,27 +91,34 @@ public class Login {
 			for (int i = 0; i < clientes.size(); i++) {
 				if (clientes.get(i).toStringSimple().equals(cliente)) {
 					System.out.println("BIENVENIDO DE VUELTA");
-					ret = true;
+					ret = clientes.get(i);
 				}
 			}
 		}
 		return ret;
 	}
 
-	public void registrase() {
+	public Cliente registrase() {
 		GestorClientes dBAcces = new GestorClientes();
 		Cliente cliente = new Cliente();
+
 		String dni = pedirDNI();
 		cliente.setDni(dni);
+
 		String nombre = con.leerDeTeclado("Nombre: ");
 		cliente.setNombre(nombre);
+
 		String apellido = con.leerDeTeclado("Apellido: ");
 		cliente.setApellidos(apellido);
+
 		String gmail = pedirGmail();
 		cliente.setEmail(gmail);
+
 		String pssword = pedirContraseña();
 		cliente.setPassword(pssword);
+
 		dBAcces.insertCliente(cliente);
+		return cliente;
 	}
 
-}// FIN
+}

@@ -1,4 +1,4 @@
-package pojos;
+package cine.modelo.pojos;
 
 import java.util.Objects;
 
