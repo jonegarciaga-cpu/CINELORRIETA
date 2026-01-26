@@ -13,11 +13,9 @@ import cine.modelo.pojos.Sesion;
 public class MenuEntradasPago {
 
 	private Teclado controladores;
-	private ArrayList<Entrada> carro;
 
 	public MenuEntradasPago() {
 		controladores = new Teclado();
-		carro = new ArrayList<Entrada>();
 	}
 
 	/**
@@ -26,7 +24,7 @@ public class MenuEntradasPago {
 	 * @param carro
 	 * @return total de el precio de entradas
 	 */
-	private double precioCarro() {
+	private double precioCarro(ArrayList<Entrada> carro) {
 		double total = 0;
 		for (Entrada entrada : carro)
 			total += entrada.getPrecio();
@@ -40,64 +38,77 @@ public class MenuEntradasPago {
 	 * @param carro
 	 * @return descuento:0.30, 0.20 o 0
 	 */
-	private double descuentoTotal() {
+	private double descuentoTotal(ArrayList<Entrada> carro) {
+		double ret = 0;
 		ArrayList<Integer> peliculasDistintas = new ArrayList<>();
-		int totalEntradas = 0;
 		for (Entrada entrada : carro) {
 			int idPeli = entrada.getSesion().getPeli().getIdPelicula();
-			if (!peliculasDistintas.contains(idPeli))
+			if (!peliculasDistintas.contains(idPeli)) {
 				peliculasDistintas.add(idPeli);
-			totalEntradas += entrada.getNumPersonas();
+				break;
+			}
 		}
-		if (totalEntradas >= 3)
-			return 0.30;
-		else if (peliculasDistintas.size() >= 2)
-			return 0.20;
-		return 0;
+		ret = porcentajeDescuento(peliculasDistintas.size());
+		return ret;
 	}
 
-	private Compra compras(Cliente cliente) {
+	private double porcentajeDescuento(int numPeliculas) {
+		double ret = 0;
+		if (numPeliculas >= 3) {
+			ret = 0.30;
+		} else if (numPeliculas >= 2) {
+			ret = 0.20;
+		} else {
+			ret = 0;
+		}
+		return ret;
+	}
+
+	private Compra compras(Cliente cliente, ArrayList<Entrada> carro) {
 		GestosCompras gestor = new GestosCompras();
 		Compra ret = new Compra();
 
 		ret.setFechaHora(LocalDate.now());
 		ret.setCli(cliente);
 
-		double descuento = descuentoTotal();
+		double descuento = descuentoTotal(carro);
 		for (Entrada entrada : carro) {
 			double descuentoEntrada = entrada.getPrecio() * descuento;
 			entrada.setDescuento(descuentoEntrada);
 			entrada.setPrecio(entrada.getPrecio() - descuentoEntrada);
 		}
 
-		double totalFinal = precioCarro();
+		double totalFinal = precioCarro(carro);
 		ret.setPrecioTotal(totalFinal);
 
 		gestor.insertCompra(ret);
 		return ret;
 	}
 
-	private void entradas(ArrayList<Entrada> entradas, Compra compra) {
+	private void entradas(Compra compra, ArrayList<Entrada> carro) {
 		GestorEntradas dBAcces = new GestorEntradas();
-		for (Entrada entrada : entradas) {
+		for (Entrada entrada : carro) {
 			entrada.setCompra(compra); // asociar la compra a entrada
 			dBAcces.insertarEntrada(entrada);
 		}
 	}
 
-	public void pagar(Cliente cliente) {
+	public void pagar(Cliente cliente, ArrayList<Entrada> carro) {
 		if (cliente != null) {
-			System.out.println(carro);
-			Compra compra = compras(cliente);
-			entradas(carro, compra);
+
+			Compra compra = compras(cliente, carro);
+			entradas(compra, carro);
 			carro.clear(); // Vaciar carro después del pago
 			System.out.println("Compra realizada con éxito.");
+			System.out.println(compra);
+			System.out.println();
+
 		} else {
 			System.out.println("Recuerda que es necesario iniciar sesión antes de pagar");
 		}
 	}
 
-	public ArrayList<Entrada> crearEntradaTemp(Sesion sesion) {
+	public ArrayList<Entrada> crearEntradaTemp(Sesion sesion, ArrayList<Entrada> carro) {
 		int numPersonas = controladores.pideNumero("¿Para cuantos quieres la entrada?");
 		double precioUna = sesion.getPrecio();
 

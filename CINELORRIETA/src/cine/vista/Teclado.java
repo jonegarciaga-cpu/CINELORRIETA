@@ -3,7 +3,7 @@ package cine.vista;
 import java.util.Scanner;
 
 public class Teclado {
-	
+
 	private Scanner sc = new Scanner(System.in);
 
 	public int pideNumero(String text) {
@@ -72,5 +72,11 @@ public class Teclado {
 		System.out.print(text);
 		ret = sc.nextLine();
 		return ret;
-	}	
+	}
+
+	public void limpiarPantalla() {
+		for (int i = 0; i < 20; i++) {
+			System.out.println();
+		}
+	}
 }

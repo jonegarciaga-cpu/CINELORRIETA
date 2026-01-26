@@ -9,11 +9,14 @@ import cine.modelo.pojos.Sesion;
 
 public class Menu {
 	private static Cliente cliente = null;
+
 	private Menu_Login login = null;
 	private Teclado teclado = null;
 	private Menu_Pelis menu_Pelis = null;
 	private Menu_Sesion menu_Sesion = null;
 	private MenuEntradasPago menuEntradasPago = null;
+
+	private ArrayList<Entrada> carro = null;
 
 	public Menu() {
 		login = new Menu_Login();// no actualizado
@@ -21,35 +24,51 @@ public class Menu {
 		menu_Pelis = new Menu_Pelis();
 		menu_Sesion = new Menu_Sesion();
 		teclado = new Teclado();
+		carro = new ArrayList<Entrada>();
 	}
 
 	/**
 	 * Metodo que Inicializa la plicacion. No finaliza y es llamada por el launcher.
 	 */
 	public void inicio() {
+		int muchasVueltaYaVale = 0;
+		esperarEnter();
 		do {
-			Pelicula peliculaSeleccionada = bucleSelecionPelicula();
-			Sesion sesionSelecionada = bubleSelecionSesio(peliculaSeleccionada);
-			ArrayList<Entrada> carro = menuEntradasPago.crearEntradaTemp(sesionSelecionada);
+			muchasVueltaYaVale++;
+			Sesion sesionSelecionada = bucleSelecionPelicula();
+			carro = menuEntradasPago.crearEntradaTemp(sesionSelecionada, carro);
 			escogerAccion();
-		} while (true);
+
+		} while (muchasVueltaYaVale <= 20);
 	}
 
-	private Pelicula bucleSelecionPelicula() {
+	private Sesion bucleSelecionPelicula() {
 		Pelicula peliculaSeleccionada = null;
+		Sesion sesionSelecionada = null;
 		do {
-			mostrarMensajeBienvenida();
 			peliculaSeleccionada = menu_Pelis.mostrarSeleccionPelicula();
+			if (peliculaSeleccionada != null) {
+				sesionSelecionada = bubleSelecionSesio(peliculaSeleccionada);
+			}
 		} while (null == peliculaSeleccionada);
-		return peliculaSeleccionada;
+		return sesionSelecionada;
 	}
 
 	private Sesion bubleSelecionSesio(Pelicula pelicula) {
 		Sesion sesionSeleccionada = null;
-		do {
-			sesionSeleccionada = menu_Sesion.elegirSesionPelicula(pelicula);
-		} while (null == sesionSeleccionada);
+		sesionSeleccionada = menu_Sesion.elegirSesionPelicula(pelicula);
+		if (sesionSeleccionada != null) {
+			System.out.println(pelicula);
+
+		}
 		return sesionSeleccionada;
+	}
+
+	private void esperarEnter() {
+		teclado.limpiarPantalla();
+		mostrarMensajeBienvenida();
+		teclado.leerDeTeclado("Pulsa ENTER para continuar...");
+
 	}
 
 	public void escogerAccion() {
@@ -59,37 +78,48 @@ public class Menu {
 		do {
 			mostrarMenuAcciones();
 			opcion = teclado.pideNumero("Qué opción deseas");
-
-			switch (opcion) {
-			case 1: // Nothing to do here... Opcion Continuar
-				break;
-			case 2:
-				accion2();
-				break;
-			case 3:
-				accion3();
-				break;
-			case 4:// pago.pagar(cliente); dolo si cliente es diferebte a null
-				break;
-			default:
-				System.out.println("Opción no válida");
-			}
+			switchDeEscogerAcion(opcion);
 		} while (opcion != 1);
+
 	}
 
-	private void accion2() {
+	private void switchDeEscogerAcion(int opcion) {
+		switch (opcion) {
+		case 1: // Nothing to do here... Opcion Continuar
+			break;
+		case 2:
+			accionInicio();
+			break;
+		case 3:
+			accionRegistro();
+			break;
+		case 4:
+			accionPago();
+			break;
+		default:
+			System.out.println("Opción no válida");
+		}
+	}
+
+	private void accionInicio() {
 		if (cliente != null) {
 			System.out.println("Cliente ya iniciado:" + cliente);
 		} else
 			cliente = login.buscarSIclienteExiste();
 	}
 
-	private void accion3() {
+	private void accionRegistro() {
 		if (cliente != null) {
 			System.out.println("Cliente ya registrado:" + cliente);
 		} else
 			cliente = login.registrase();
+	}
 
+	private void accionPago() {
+		if (cliente != null) {
+			menuEntradasPago.pagar(cliente, carro);
+			cliente = null;
+		}
 	}
 
 	private void mostrarMensajeBienvenida() {
@@ -108,4 +138,5 @@ public class Menu {
 		System.out.println("3 REGISTRAR");
 		System.out.println("4 PAGAR");
 	}
+
 }

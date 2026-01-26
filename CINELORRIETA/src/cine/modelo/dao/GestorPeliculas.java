@@ -20,8 +20,7 @@ public class GestorPeliculas {
 	 */
 	public ArrayList<Pelicula> getAllPeliculas() {
 		ArrayList<Pelicula> ret = null;
-		String sql = "select * from Pelicula";
-
+		String sql = "SELECT DISTINCT p.idPelicula, p.nombre, p.duracion, p.genero, p.precio FROM Pelicula p JOIN Sesion s ON p.idPelicula = s.idPelicula ORDER BY s.fechaIni ASC; ";
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
