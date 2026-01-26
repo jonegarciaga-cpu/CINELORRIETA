@@ -38,7 +38,7 @@ public class MenuEntradasPago {
 	 * @param carro
 	 * @return descuento:0.30, 0.20 o 0
 	 */
-	private double descuentoTotal(ArrayList<Entrada> carro) {
+	private double descuentoAplicar(ArrayList<Entrada> carro) {
 		double ret = 0;
 		ArrayList<Integer> peliculasDistintas = new ArrayList<>();
 		for (Entrada entrada : carro) {
@@ -70,18 +70,25 @@ public class MenuEntradasPago {
 		ret.setFechaHora(LocalDate.now());
 		ret.setCli(cliente);
 
-		double descuento = descuentoTotal(carro);
-		for (Entrada entrada : carro) {
-			double descuentoEntrada = entrada.getPrecio() * descuento;
-			entrada.setDescuento(descuentoEntrada);
-			entrada.setPrecio(entrada.getPrecio() - descuentoEntrada);
-		}
+		double descuento = descuentoAplicar(carro);
+		actualizarPrecioEntradas(descuento, carro);
 
 		double totalFinal = precioCarro(carro);
 		ret.setPrecioTotal(totalFinal);
 
 		gestor.insertCompra(ret);
 		return ret;
+	}
+
+	private void actualizarPrecioEntradas(double descuento, ArrayList<Entrada> carro) {
+		for (int i = 0; i < carro.size(); i++) {
+			Entrada entrada = carro.get(i);
+
+			double descuentoPorEntrada = entrada.getPrecio() * descuento;
+			entrada.setDescuento(descuentoPorEntrada);
+			entrada.setPrecio(entrada.getPrecio() - descuentoPorEntrada);
+		}
+
 	}
 
 	private void entradas(Compra compra, ArrayList<Entrada> carro) {
