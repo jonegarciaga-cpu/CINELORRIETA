@@ -2,6 +2,11 @@ package cine.modelo.utils;
 
 public class Conectividad {
 
+	/**
+	 * Verifica que la BBDD es correctamente conectada a mi programa.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

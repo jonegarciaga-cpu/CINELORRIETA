@@ -12,6 +12,7 @@ import cine.modelo.pojos.Cliente;
 import cine.modelo.utils.DBUtils;
 
 public class GestorClientes {
+
 	/**
 	 * Inserta un cliente en la tabla clientes
 	 * 
@@ -23,7 +24,6 @@ public class GestorClientes {
 
 		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
 				PreparedStatement ps = connection.prepareStatement(sql)) {
-
 			Class.forName(DBUtils.DRIVER);
 
 			ps.setString(1, cliente.getDni());
@@ -33,9 +33,7 @@ public class GestorClientes {
 			ps.setString(5, cliente.getPassword()); // El trigger se encargará de cifrar la contraseña
 
 			ps.executeUpdate();
-
 			System.out.println("Cliente insertado correctamente.");
-
 		} catch (SQLException sqle) {
 			System.out.println("Error con la BBDD - " + sqle.getMessage());
 		} catch (Exception e) {
@@ -55,7 +53,6 @@ public class GestorClientes {
 		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(sql)) {
-
 			Class.forName(DBUtils.DRIVER);
 
 			while (resultSet.next()) {
@@ -69,13 +66,11 @@ public class GestorClientes {
 
 				ret.add(cliente);
 			}
-
 		} catch (SQLException sqle) {
 			System.out.println("Error con la BBDD - " + sqle.getMessage());
 		} catch (Exception e) {
 			System.out.println("Error generico - " + e.getMessage());
 		}
-
 		return ret;
 	}
 

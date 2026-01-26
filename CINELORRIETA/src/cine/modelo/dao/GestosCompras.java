@@ -12,18 +12,17 @@ import cine.modelo.pojos.Compra;
 import cine.modelo.utils.DBUtils;
 
 public class GestosCompras {
+
 	/**
-	 * Inserta la Compra con su Cliente
-	 * 
-	 * @param Compra con su Cliente
+	 * Insertar conmpra con su cliente 
+	 * @param compra
+	 * @return idCompra o -1
 	 */
 	public int insertCompra(Compra compra) {
 		String sql = "INSERT INTO compra (fechaHora, precioTotal, descuento, dni) VALUES (?, ?, ?, ?)";
 
 		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-			// valores de compra
 			ps.setTimestamp(1, Timestamp.valueOf(compra.getFechaHora().atStartOfDay()));
 			ps.setDouble(2, compra.getPrecioTotal());
 			ps.setDouble(3, compra.getDescuento());
@@ -33,7 +32,6 @@ public class GestosCompras {
 			if (filasAfectadas == 0) {
 				throw new SQLException("No se pudo insertar la compra, ninguna fila afectada.");
 			}
-
 			try (ResultSet rs = ps.getGeneratedKeys()) {
 				if (rs.next()) {
 					int idGenerado = rs.getInt(1);
@@ -43,11 +41,9 @@ public class GestosCompras {
 					throw new SQLException("No se pudo obtener el ID generado.");
 				}
 			}
-
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 		}
-
 		return -1; // retorno de error
 	}
 }

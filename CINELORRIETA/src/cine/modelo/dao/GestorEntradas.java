@@ -13,7 +13,7 @@ import cine.modelo.utils.DBUtils;
 public class GestorEntradas {
 
 	/**
-	 * Inserta la entrada con su sesión
+	 * Inserta la entrada con su sesión y su compra
 	 * 
 	 * @param entrada con su sesión
 	 */
@@ -22,10 +22,7 @@ public class GestorEntradas {
 		String sql = "INSERT INTO entrada(numPersonas, precio, descuento, idSesion, idCompra) VALUES (?, ?, ?, ?, ?)";
 
 		try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
-				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-		// Esto permite obtener el ID generado
-		) {
-
+				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, entrada.getNumPersonas());
 			ps.setDouble(2, entrada.getPrecio()); // O BigDecimal PERO NS NO LO TOCO
 			ps.setDouble(3, entrada.getDescuento());
@@ -34,15 +31,12 @@ public class GestorEntradas {
 
 			ps.executeUpdate();
 
-			// Recuperar el id autogenerado
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
 				entrada.setIdEntrada(rs.getInt(1));
 			}
-
 		} catch (SQLException e) {
 			System.out.println("Error con la BBDD - " + e.getMessage());
 		}
 	}
-
 }

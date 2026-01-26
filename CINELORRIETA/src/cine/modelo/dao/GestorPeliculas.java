@@ -24,7 +24,6 @@ public class GestorPeliculas {
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
-
 		try {
 			Class.forName(DBUtils.DRIVER);
 			connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
@@ -73,5 +72,4 @@ public class GestorPeliculas {
 		}
 		return ret;
 	}
-
 }

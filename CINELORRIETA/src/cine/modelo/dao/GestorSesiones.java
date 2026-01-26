@@ -32,9 +32,7 @@ public class GestorSesiones {
 
 			try (Connection connection = DriverManager.getConnection(DBUtils.URL, DBUtils.USER, DBUtils.PASS);
 					PreparedStatement ps = connection.prepareStatement(sql)) {
-
 				ps.setInt(1, pelicula);
-
 				try (ResultSet rs = ps.executeQuery()) {
 					while (rs.next()) {
 						Sesion sesion = new Sesion();
@@ -51,13 +49,11 @@ public class GestorSesiones {
 					}
 				}
 			}
-
 		} catch (SQLException e) {
 			System.out.println("Error con la BBDD - " + e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println("Driver no encontrado - " + e.getMessage());
 		}
-
 		return ret;
 	}
 }
