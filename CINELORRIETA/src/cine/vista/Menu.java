@@ -33,7 +33,7 @@ public class Menu {
 	}
 
 	/**
-	 * Da la bienvenida y espera a que el usuario de enter
+	 * Da la bienvenida y espera a que el usuario dé enter
 	 */
 	private void esperarEnter() {
 		controlador.limpiarPantalla();
@@ -42,10 +42,10 @@ public class Menu {
 	}
 
 	/**
-	 * comprueba si sesion es null o no y te manda a donde sigue
+	 * Comprueba si sesión es null o no y te manda a donde sigue
 	 * 
 	 * @param pelicula
-	 * @return Sesio o null
+	 * @return Sesion o null
 	 */
 	private Sesion selecionSesio(Pelicula pelicula) {
 		Sesion sesionSeleccionada = null;
@@ -57,7 +57,7 @@ public class Menu {
 	}
 
 	/**
-	 * Seleciona una pelicula y te manda a Sesion sino sale
+	 * Selecciona una película y te manda a Sesion sino sale
 	 * 
 	 * @return Sesion o null
 	 */
@@ -74,7 +74,7 @@ public class Menu {
 	}
 
 	/**
-	 * Bucle para escojer una accion
+	 * Bucle para escoger una acción
 	 */
 	public void escogerAccion() {
 		int opcion = 0;
@@ -86,7 +86,7 @@ public class Menu {
 	}
 
 	/**
-	 * Recoje opcion y te manda a la correspondiente
+	 * Recoge opción y te manda a la correspondiente
 	 * 
 	 * @param opcion
 	 * @return "Opción no válida"
@@ -110,8 +110,8 @@ public class Menu {
 	}
 
 	/**
-	 * Compueba que el cliete no este iniciado ( null ) Cliente != null ->
-	 * {@return} Cliente Cleinte == null -> {@return} lo redidecion
+	 * Comprueba que el cliente no esté iniciado (null) Cliente != null ->
+	 * {@return} Cliente Cliente == null -> {@return} lo redirecciona
 	 */
 	private void accionInicio() {
 		if (cliente != null) {
@@ -121,8 +121,8 @@ public class Menu {
 	}
 
 	/**
-	 * Compueba que el cliete no este iniciado ( null ) Cliente != null ->
-	 * {@return} Cliente Cleinte == null -> {@return} lo redidecion
+	 * Comprueba que el cliente no esté iniciado (null) Cliente != null ->
+	 * {@return} Cliente Cliente == null -> {@return} lo redirecciona
 	 */
 	private void accionRegistro() {
 		if (cliente != null) {
@@ -132,7 +132,7 @@ public class Menu {
 	}
 
 	/**
-	 * Cnfirma que cliente este registrado antes de el pago y lo manda al mismo
+	 * Confirma que cliente esté registrado antes del pago y lo manda al mismo
 	 */
 	private void accionPago() {
 		if (cliente != null) {
@@ -142,8 +142,8 @@ public class Menu {
 	}
 
 	/**
-	 * Metodo que Inicializa la plicacion. No finaliza almenos que lleve demasiado
-	 * tiempo dando bueltas y es llamado por el launcher.
+	 * Método que inicializa la aplicación. No finaliza al menos que lleve demasiado
+	 * tiempo dando vueltas y es llamado por el launcher.
 	 */
 	public void inicio() {
 		esperarEnter();
@@ -182,7 +182,7 @@ public class Menu {
 	// LOGIN
 
 	/**
-	 * El matches()método busca una cadena en busca de una coincidencia con una
+	 * El matches() método busca una cadena en busca de una coincidencia con una
 	 * expresión regular y devuelve las coincidencias.
 	 * 
 	 * El método matches() busca una cadena en busca de una coincidencia con una
@@ -190,11 +190,11 @@ public class Menu {
 	 */
 
 	/**
-	 * Metodo que valida el DNI, que tenga 9 caracteres, la letra correcta en el
-	 * carcater 9 y 8 dijitos
+	 * Método que valida el DNI, que tenga 9 caracteres, la letra correcta en el
+	 * caracter 9 y 8 dígitos
 	 * 
 	 * @param dni
-	 * @return true o folse
+	 * @return true o false
 	 */
 	private static boolean validarDNI(String dni) {
 		if (dni == null || dni.length() != 9) {
@@ -259,7 +259,7 @@ public class Menu {
 	}
 
 	/**
-	 * registra al usuario para crear un nuevo cliente
+	 * Registra al usuario para crear un nuevo cliente
 	 * 
 	 * @return cliente
 	 */
@@ -287,7 +287,7 @@ public class Menu {
 	}
 
 	/**
-	 * inicia un usuario exitente en la base de datos
+	 * Inicia un usuario existente en la base de datos
 	 * 
 	 * @return Cliente= dni + password
 	 */
@@ -298,7 +298,7 @@ public class Menu {
 	}
 
 	/**
-	 * Verifica si el cliente esta en la base de datos
+	 * Verifica si el cliente está en la base de datos
 	 * 
 	 * @param clientes
 	 * @return cliente
@@ -335,10 +335,10 @@ public class Menu {
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
-	// PELICULAS
+	// PELÍCULAS
 
 	/**
-	 * Muestra todas las peliculas que se encuentran en la BBDD
+	 * Muestra todas las películas que se encuentran en la BBDD
 	 * 
 	 * @param peliculas
 	 */
@@ -352,7 +352,7 @@ public class Menu {
 	}
 
 	/**
-	 * Busca una pelicula atrabes de su identificador
+	 * Busca una película a través de su identificador
 	 * 
 	 * @param peliculas
 	 * @param id
@@ -370,7 +370,7 @@ public class Menu {
 	}
 
 	/**
-	 * Deja selecionar una pelicula de la lista
+	 * Deja seleccionar una película de la lista
 	 * 
 	 * @return pelicula
 	 */
@@ -392,10 +392,10 @@ public class Menu {
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
-	// SESION
+	// SESIÓN
 
 	/**
-	 * muestra la pelicula que emos elejido y llama al metodo que nos ensella todas
+	 * Muestra la película que hemos elegido y llama al método que nos enseña todas
 	 * las sesiones de la misma
 	 * 
 	 * @param pelicula
@@ -406,11 +406,11 @@ public class Menu {
 	}
 
 	/**
-	 * encuntra una sesion por su id
+	 * Encuentra una sesión por su id
 	 * 
-	 * @param sesiones  donde busca la sesion
-	 * @param idBuscado el id de la sesion que qeremos buscar
-	 * @return la sesion o null
+	 * @param sesiones  donde busca la sesión
+	 * @param idBuscado el id de la sesión que queremos buscar
+	 * @return la sesión o null
 	 */
 	private Sesion encontrarSesionPorId(ArrayList<Sesion> sesiones, int idBuscado) {
 		for (Sesion sesion : sesiones)
@@ -420,9 +420,9 @@ public class Menu {
 	}
 
 	/**
-	 * muestra todas las sesiones de una pelicula
+	 * Muestra todas las sesiones de una película
 	 * 
-	 * @param idPelicula es el id de la pelicula de la cual queremis ver las
+	 * @param idPelicula es el id de la película de la cual queremos ver las
 	 *                   sesiones
 	 */
 	private void verSesionesPelicula(int idPelicula) {
@@ -435,10 +435,10 @@ public class Menu {
 	}
 
 	/**
-	 * metodo para elejir una sesion de una pelicula
+	 * Método para elegir una sesión de una película
 	 * 
-	 * @param pelicula de la cual queremos la sesion
-	 * @return la sesion elejida y la pelicula a la que pertenece
+	 * @param pelicula de la cual queremos la sesión
+	 * @return la sesión elegida y la película a la que pertenece
 	 */
 	public Sesion elegirSesionPelicula(Pelicula pelicula) {
 		ArrayList<Sesion> sesiones = controlador.cargarSesiones(pelicula.getIdPelicula());
@@ -460,22 +460,30 @@ public class Menu {
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
-	// COMPRRA Y ENTRADAS
+	// MÉTODOS DE DESCUENTO
 
+	/**
+	 * Calcula qué porcentaje de descuento debe llevar la/s entradas/Compra
+	 *
+	 * @param numPeliculas número de películas distintas
+	 * @return 0.30, 0.20 o 0 según la cantidad
+	 */
 	private double porcentajeDescuento(int numPeliculas) {
-		double ret = 0;
-		if (numPeliculas >= 3) {
-			ret = 0.30;
-		} else if (numPeliculas >= 2) {
-			ret = 0.20;
-		} else {
-			ret = 0;
-		}
-		return ret;
+		if (numPeliculas >= 3)
+			return 0.30;
+		if (numPeliculas >= 2)
+			return 0.20;
+		return 0;
 	}
 
+	/**
+	 * Calcula cuántas películas distintas hay en el carro y devuelve el descuento
+	 * correspondiente
+	 *
+	 * @param carro Lista de entradas
+	 * @return porcentaje de descuento a aplicar
+	 */
 	private double descuentoAplicar(ArrayList<Entrada> carro) {
-		double ret = 0;
 		ArrayList<Integer> peliculasDistintas = new ArrayList<>();
 		for (Entrada entrada : carro) {
 			int idPeli = entrada.getSesion().getPeli().getIdPelicula();
@@ -483,69 +491,95 @@ public class Menu {
 				peliculasDistintas.add(idPeli);
 			}
 		}
-		ret = porcentajeDescuento(peliculasDistintas.size());
-		return ret;
+		return porcentajeDescuento(peliculasDistintas.size());
 	}
 
+	/**
+	 * Recorre el carro y actualiza el precio y descuento de las entradas
+	 *
+	 * @param carro Lista de entradas
+	 * @return total del descuento aplicado
+	 */
 	private double actualizarPrecioEntradas(ArrayList<Entrada> carro) {
-		double ret = 0;
+		double totalDescuento = 0;
 		double descuento = descuentoAplicar(carro);
-		for (int i = 0; i < carro.size(); i++) {
-			Entrada entrada = carro.get(i);
+
+		for (Entrada entrada : carro) {
 			double descuentoPorEntrada = entrada.getPrecio() * descuento;
 			entrada.setDescuento(descuentoPorEntrada);
 			entrada.setPrecio(entrada.getPrecio() - descuentoPorEntrada);
-			ret = ret + descuentoPorEntrada;
+			totalDescuento += descuentoPorEntrada;
 		}
-		return ret;
+
+		return totalDescuento;
 	}
 
+	/**
+	 * Calcula el precio total del carro
+	 *
+	 * @param carro Lista de entradas
+	 * @return total final
+	 */
 	private double precioCarro(ArrayList<Entrada> carro) {
 		double total = 0;
-		for (Entrada entrada : carro)
+		for (Entrada entrada : carro) {
 			total += entrada.getPrecio();
+		}
 		return total;
 	}
 
+	// -----------------------------------------------------------------------------------------------------------------------
+
+	// MÉTODOS DE COMPRA Y DE ENTRADAS
+
+	/**
+	 * Inserta los atributos de una compra
+	 *
+	 * @param cliente Cliente que realiza la compra
+	 * @param carro   Lista de entradas
+	 * @return Compra creada
+	 */
 	private Compra compras(Cliente cliente, ArrayList<Entrada> carro) {
 		GestosCompras gestor = new GestosCompras();
-		Compra ret = new Compra();
+		Compra compra = new Compra();
 
-		ret.setFechaHora(LocalDate.now());
-		ret.setCli(cliente);
+		compra.setFechaHora(LocalDate.now());
+		compra.setCli(cliente);
 
 		double descuento = actualizarPrecioEntradas(carro);
-		ret.setDescuento(descuento);
-		double totalFinal = precioCarro(carro);
-		ret.setPrecioTotal(totalFinal);
+		compra.setDescuento(descuento);
 
-		gestor.insertCompra(ret);
-		return ret;
+		double totalFinal = precioCarro(carro);
+		compra.setPrecioTotal(totalFinal);
+
+		gestor.insertCompra(compra);
+		return compra;
 	}
 
+	/**
+	 * Recorre el carro final y le añade la compra correspondiente para luego
+	 * insertar las entradas en la base de datos
+	 *
+	 * @param compra Compra asociada
+	 * @param carro  Lista de entradas
+	 */
 	private void entradas(Compra compra, ArrayList<Entrada> carro) {
 		GestorEntradas dBAcces = new GestorEntradas();
 		for (Entrada entrada : carro) {
-			entrada.setCompra(compra); // asociar la compra a entrada
+			entrada.setCompra(compra); // asociar la compra a la entrada
 			dBAcces.insertarEntrada(entrada);
 		}
 	}
 
-	private void pagar(Cliente cliente, ArrayList<Entrada> carro) {
-		if (cliente != null) {
-			Compra compra = compras(cliente, carro);
-			entradas(compra, carro);
-			carro.clear(); // Vaciar carro después del pago
-			System.out.println("Compra realizada con éxito.");
-			System.out.println(compra);
-			System.out.println();
-		} else {
-			System.out.println("Recuerda que es necesario iniciar sesión antes de pagar");
-		}
-	}
-
+	/**
+	 * Crea una entrada temporal y la añade al carro
+	 *
+	 * @param sesion Sesión de cine
+	 * @param carro  Lista de entradas
+	 * @return carro actualizado
+	 */
 	private ArrayList<Entrada> crearEntradaTemp(Sesion sesion, ArrayList<Entrada> carro) {
-		int numPersonas = controlador.pideNumero("¿Para cuantos quieres la entrada?");
+		int numPersonas = controlador.pideNumero("¿Para cuántos quieres la entrada?");
 		double precioUna = sesion.getPrecio();
 
 		Entrada entrada = new Entrada();
@@ -556,9 +590,35 @@ public class Menu {
 		carro.add(entrada);
 		System.out.println("Entrada añadida al carrito");
 		return carro;
-
 	}
 
+	/**
+	 * Imprime el ticket de la compra
+	 *
+	 * @param compra  Compra realizada
+	 * @param carro   Lista de entradas
+	 * @param cliente Cliente que realiza la compra
+	 */
+	private void tiket(Compra compra, ArrayList<Entrada> carro, Cliente cliente) {
+		System.out.println("Compra realizada con éxito.");
+	}
+
+	/**
+	 * Comprueba que se pague y envía a la opción de ticket
+	 *
+	 * @param cliente Cliente que realiza el pago
+	 * @param carro   Lista de entradas
+	 */
+	private void pagar(Cliente cliente, ArrayList<Entrada> carro) {
+		if (cliente != null) {
+			Compra compra = compras(cliente, carro);
+			entradas(compra, carro);
+			carro.clear(); // Vaciar carro después del pago
+			tiket(compra, carro, cliente);
+		} else {
+			System.out.println("Recuerda que es necesario iniciar sesión antes de pagar");
+		}
+	}
 	// -----------------------------------------------------------------------------------------------------------------------
 
 }
