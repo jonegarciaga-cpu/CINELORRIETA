@@ -86,4 +86,16 @@ public class Entrada {
 				+ ", descuento=" + descuento + ", sesion=" + sesion + ", compra=" + compra + "]";
 	}
 
+	public String toStringTicket() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Película: ").append(sesion.getPeli().getNombre()).append("\n");
+		sb.append("Sesión: ").append(sesion.getFechaIni()).append("\n");
+		sb.append("Número de personas: ").append(numPersonas).append("\n");
+		sb.append("Precio unitario: ").append(sesion.getPrecio()).append("€\n");
+		sb.append("Precio total: ").append(precio).append("€\n");
+		sb.append("Descuento aplicado: ").append(descuento).append("€\n");
+		sb.append("---------------------------\n");
+		return sb.toString();
+	}
+
 }

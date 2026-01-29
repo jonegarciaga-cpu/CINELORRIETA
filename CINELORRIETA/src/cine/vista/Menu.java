@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import cine.controlador.Controlador;
 import cine.modelo.dao.GestorClientes;
 import cine.modelo.dao.GestorEntradas;
+import cine.modelo.dao.GestorFichero;
 import cine.modelo.dao.GestosCompras;
 import cine.modelo.pojos.Cliente;
 import cine.modelo.pojos.Compra;
@@ -23,20 +24,20 @@ public class Menu {
 	private static String dniMatches = "\\d{8}[A-Z]";
 
 	private Controlador controlador = null;
-
+	private GestorFichero gestorFichero = null;
 	private ArrayList<Entrada> carro = null;
 
 	public Menu() {
 
 		controlador = new Controlador();
 		carro = new ArrayList<Entrada>();
+		gestorFichero = new GestorFichero();
 	}
 
 	/**
 	 * Da la bienvenida y espera a que el usuario dé enter
 	 */
 	private void esperarEnter() {
-		controlador.limpiarPantalla();
 		mostrarMensajeBienvenida();
 		controlador.leerDeTeclado("Pulsa ENTER para continuar...");
 	}
@@ -56,6 +57,7 @@ public class Menu {
 		return sesionSeleccionada;
 	}
 
+	// EXPLOTA
 	/**
 	 * Selecciona una película y te manda a Sesion sino sale
 	 * 
@@ -66,6 +68,7 @@ public class Menu {
 		Sesion sesionSelecionada = null;
 		do {
 			peliculaSeleccionada = mostrarSeleccionPelicula();
+			sesionSelecionada.setPeli(peliculaSeleccionada);
 			if (peliculaSeleccionada != null) {
 				sesionSelecionada = selecionSesio(peliculaSeleccionada);
 			}
@@ -79,6 +82,7 @@ public class Menu {
 	public void escogerAccion() {
 		int opcion = 0;
 		do {
+			controlador.limpiarPantalla();
 			mostrarMensajeMenuAcciones();
 			opcion = controlador.pideNumero("Qué opción deseas");
 			switchDeEscogerAcion(opcion);
@@ -593,17 +597,6 @@ public class Menu {
 	}
 
 	/**
-	 * Imprime el ticket de la compra
-	 *
-	 * @param compra  Compra realizada
-	 * @param carro   Lista de entradas
-	 * @param cliente Cliente que realiza la compra
-	 */
-	private void tiket(Compra compra, ArrayList<Entrada> carro, Cliente cliente) {
-		System.out.println("Compra realizada con éxito.");
-	}
-
-	/**
 	 * Comprueba que se pague y envía a la opción de ticket
 	 *
 	 * @param cliente Cliente que realiza el pago
@@ -613,12 +606,78 @@ public class Menu {
 		if (cliente != null) {
 			Compra compra = compras(cliente, carro);
 			entradas(compra, carro);
+			tiket(compra, carro);
 			carro.clear(); // Vaciar carro después del pago
-			tiket(compra, carro, cliente);
 		} else {
 			System.out.println("Recuerda que es necesario iniciar sesión antes de pagar");
 		}
 	}
 	// -----------------------------------------------------------------------------------------------------------------------
+
+	// FICHERO--TIKET
+	/**
+	 * Imprime el ticket de la compra
+	 *
+	 * @param compra  Compra realizada
+	 * @param carro   Lista de entradas
+	 * @param cliente Cliente que realiza la compra
+	 */
+	private void tiket(Compra compra, ArrayList<Entrada> carro) {
+		System.out.println("Compra realizada con éxito.");
+		String texto = crearTexto(compra, carro);
+		escribirTiket(texto, compra);
+	}
+
+	private String crearTexto(Compra compra, ArrayList<Entrada> carro) {
+		StringBuilder texto = new StringBuilder();
+		texto.append(textoCompra(compra).toString()).append(textoCliente(compra).toString())
+				.append(textoEntradas(carro).toString());
+		return texto.toString();
+	}
+
+	private StringBuilder textoEntradas(ArrayList<Entrada> carro) {
+		StringBuilder ret = new StringBuilder();
+		for (Entrada entrada : carro) {
+			ret.append(entrada.toStringTicket()).append("\n");
+		}
+		return ret;
+	}
+
+	private StringBuilder textoCompra(Compra compra) {
+		StringBuilder ret = new StringBuilder();
+		ret.append("COMPRA:\n");
+		ret.append("Fecha: ").append(compra.getFechaHora()).append("\n");
+		ret.append("Total compra: ").append(compra.getPrecioTotal()).append("€\n");
+		ret.append("===========================\n");
+		return ret;
+	}
+
+	private StringBuilder textoCliente(Compra compra) {
+		StringBuilder ret = new StringBuilder();
+		ret.append("CLIENTE:\n");
+		ret.append("DNI: ").append(compra.getCli().getDni()).append("\n");
+		ret.append("Nombre: ").append(compra.getCli().getNombre()).append(" ").append(compra.getCli().getApellidos())
+				.append("\n");
+		ret.append("Email: ").append(compra.getCli().getEmail()).append("\n");
+		ret.append("---------------------------\n");
+		return ret;
+	}
+
+	private void escribirTiket(String texto, Compra compra) {
+		gestorFichero.sobreescribirFichero(texto, compra);
+		System.out.println("Tiket impreso con exto");
+		leerTiket();
+	}
+
+	/**
+	 * Muestra el tiket por pantalla
+	 */
+	private void leerTiket() {
+		ArrayList<String> lineas = gestorFichero.leerFichero();
+		if (null != lineas)
+			for (String linea : lineas) {
+				System.out.println(linea);
+			}
+	}
 
 }
