@@ -2,43 +2,62 @@ package cine.controlador.text;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import cine.modelo.dao.GestorClientes;
+import cine.modelo.dao.GestorPeliculas;
+import cine.modelo.dao.GestorSesiones;
+import cine.modelo.pojos.Cliente;
+import cine.modelo.pojos.Pelicula;
+import cine.modelo.pojos.Sesion;
+
 public class Gestor {
+	public static int numCliente = 60;
+	public static int numPelicula = 36;
+	public static int numSesiones = 6;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
 
 	@Test
-	public void testInsertCliente() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetAllClientes() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testInsertarEntrada() {
-		fail("Not yet implemented");
-	}
-
-	@Test
+	/**
+	 * Comprueba que saca todas las peliculas de la bbdd
+	 */
 	public void testGetAllPeliculas() {
-		fail("Not yet implemented");
+		GestorPeliculas controlador = new GestorPeliculas();
+		ArrayList<Pelicula> peliculas = controlador.getAllPeliculas();
+		if (peliculas.size() != numPelicula) {
+			fail("Se esperaban " + numPelicula + " clientes");
+		}
 	}
 
 	@Test
+	/**
+	 * Comprueba que saca todas las sesiones de la bbdd
+	 * 
+	 * SELECT * FROM `sesion` WHERE idPelicula= 3;
+	 */
 	public void testGetAllSesiones() {
-		fail("Not yet implemented");
+		GestorSesiones controlador = new GestorSesiones();
+		ArrayList<Sesion> sesiones = controlador.getAllSesiones(3);
+		if (sesiones.size() != numSesiones) {
+			fail("Se esperaban " + numSesiones + " clientes");
+		}
 	}
 
 	@Test
-	public void testInsertCompra() {
-		fail("Not yet implemented");
+	/**
+	 * Comprueba que saca todos los clientes de la bbdd
+	 */
+	public void testGetAllClientes() {
+		GestorClientes controlador = new GestorClientes();
+		ArrayList<Cliente> clientes = controlador.getAllClientes();
+		if (clientes.size() != numCliente) {
+			fail("Se esperaban " + numCliente + " clientes");
+		}
 	}
 
 }

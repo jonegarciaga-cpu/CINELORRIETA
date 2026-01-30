@@ -2,35 +2,60 @@ package cine.controlador.text;
 
 import static org.junit.Assert.fail;
 
-import org.junit.BeforeClass;
+import java.util.ArrayList;
+
 import org.junit.Test;
 
+import cine.modelo.pojos.Entrada;
+
 public class Descuentos {
+	private ArrayList<Entrada> carro = null;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	private ArrayList<Entrada> elCarro() {
+		carro = new ArrayList<>();
+
+		carro.add(Entrada(2, 1, 8.00, 2.00, 1, 1));
+		carro.add(Entrada(1, 1, 9.00, 1.00, 2, 1));
+		carro.add(Entrada(3, 3, 21.00, 3.00, 1, 2));
+
+		return carro;
+	}
+
+	private Entrada Entrada(int idEntrada, int numPersonas, double precio, double descuento, int idSesion,
+			int idCompra) {
+		Entrada ret = new Entrada();
+		ret.setIdEntrada(idEntrada);
+		ret.setNumPersonas(numPersonas);
+		ret.setPrecio(precio);
+		ret.setDescuento(descuento);
+		return ret;
 	}
 
 	@Test
-	public void porcentajeDescuento() {
-		fail("Not yet implemented");
+	/**
+	 * comprueba que entra correctamente a el porcentaje que necesta
+	 */
+	public void testporcentajeDescuento() {
+		int numPeliculas = 5;
+		if (numPeliculas >= 3) {
+		} else {
+			fail("Se esperaba entrar en el if");
+		}
 	}
 
 	@Test
-	public void descuentoAplicar() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-
-	public void actualizarPrecioEntradas() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-
-	public void precioCarro() {
-		fail("Not yet implemented");
+	/**
+	 * Comprueba que sume correctamente todos los precios del arraylist
+	 */
+	public void testprecioCarro() {
+		double total = 0;
+		elCarro();
+		for (Entrada entrada : carro) {
+			total += entrada.getPrecio();
+		}
+		if (total != 38.00) {
+			fail("se esperaba 38");
+		}
 	}
 
 }

@@ -57,7 +57,6 @@ public class Menu {
 		return sesionSeleccionada;
 	}
 
-	// EXPLOTA
 	/**
 	 * Selecciona una película y te manda a Sesion sino sale
 	 * 
@@ -68,10 +67,10 @@ public class Menu {
 		Sesion sesionSelecionada = null;
 		do {
 			peliculaSeleccionada = mostrarSeleccionPelicula();
-			sesionSelecionada.setPeli(peliculaSeleccionada);
 			if (peliculaSeleccionada != null) {
 				sesionSelecionada = selecionSesio(peliculaSeleccionada);
 			}
+			sesionSelecionada.setPeli(peliculaSeleccionada);
 		} while (null == peliculaSeleccionada);
 		return sesionSelecionada;
 	}
@@ -514,7 +513,6 @@ public class Menu {
 			entrada.setPrecio(entrada.getPrecio() - descuentoPorEntrada);
 			totalDescuento += descuentoPorEntrada;
 		}
-
 		return totalDescuento;
 	}
 
@@ -606,15 +604,32 @@ public class Menu {
 		if (cliente != null) {
 			Compra compra = compras(cliente, carro);
 			entradas(compra, carro);
-			tiket(compra, carro);
+			preguntarSiTiket(compra, carro);
 			carro.clear(); // Vaciar carro después del pago
 		} else {
 			System.out.println("Recuerda que es necesario iniciar sesión antes de pagar");
 		}
 	}
+
+	/**
+	 * pregunta si se desea un tiket y te lo imprime tanto en fichero como en
+	 * pantalla
+	 * 
+	 * @param compra
+	 * @param carro
+	 */
+	private void preguntarSiTiket(Compra compra, ArrayList<Entrada> carro) {
+		boolean quiereTiket = controlador.pideBooleano("Deseas tiket");
+		if (quiereTiket != false) {
+			tiket(compra, carro);
+		}
+		tiketDigital(compra, carro);
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------------
 
 	// FICHERO--TIKET
+
 	/**
 	 * Imprime el ticket de la compra
 	 *
@@ -628,6 +643,25 @@ public class Menu {
 		escribirTiket(texto, compra);
 	}
 
+	/**
+	 * Genera un tiket
+	 * 
+	 * @param compra
+	 * @param carro
+	 */
+	private void tiketDigital(Compra compra, ArrayList<Entrada> carro) {
+		System.out.println("Compra realizada con éxito.");
+		String texto = crearTexto(compra, carro);
+		System.out.println(texto);
+	}
+
+	/**
+	 * genera un String desde varios sitios diferentes
+	 * 
+	 * @param compra
+	 * @param carro
+	 * @return STRING
+	 */
 	private String crearTexto(Compra compra, ArrayList<Entrada> carro) {
 		StringBuilder texto = new StringBuilder();
 		texto.append(textoCompra(compra).toString()).append(textoCliente(compra).toString())
@@ -635,6 +669,12 @@ public class Menu {
 		return texto.toString();
 	}
 
+	/**
+	 * Te genera el texto de la entrada
+	 * 
+	 * @param carro
+	 * @return String entrada o varios String entrada
+	 */
 	private StringBuilder textoEntradas(ArrayList<Entrada> carro) {
 		StringBuilder ret = new StringBuilder();
 		for (Entrada entrada : carro) {
@@ -643,6 +683,12 @@ public class Menu {
 		return ret;
 	}
 
+	/**
+	 * Te genera el texto de la compra
+	 * 
+	 * @param compra
+	 * @return String compra
+	 */
 	private StringBuilder textoCompra(Compra compra) {
 		StringBuilder ret = new StringBuilder();
 		ret.append("COMPRA:\n");
@@ -652,6 +698,12 @@ public class Menu {
 		return ret;
 	}
 
+	/**
+	 * Te genera el texto de el cliente
+	 * 
+	 * @param compra
+	 * @return String Cliente
+	 */
 	private StringBuilder textoCliente(Compra compra) {
 		StringBuilder ret = new StringBuilder();
 		ret.append("CLIENTE:\n");
@@ -663,6 +715,12 @@ public class Menu {
 		return ret;
 	}
 
+	/**
+	 * Imprime el tiket en un fichero y te habisa
+	 * 
+	 * @param texto
+	 * @param compra
+	 */
 	private void escribirTiket(String texto, Compra compra) {
 		gestorFichero.sobreescribirFichero(texto, compra);
 		System.out.println("Tiket impreso con exto");
